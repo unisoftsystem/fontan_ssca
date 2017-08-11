@@ -1,0 +1,386 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>SSCA</title>
+	<link rel="stylesheet" href="themes/APP_SSCA.min.css" />
+	<link rel="stylesheet" href="themes/jquery.mobile.icons.min.css" />
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile.structure-1.4.5.min.css" />
+	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <script src="themes/js/ConexionWebService.js"></script>
+    <style>
+    	div.avatar {
+			/* cambia estos dos valores para definir el tamaño de tu círculo */
+			height: 100px;
+			width: 100px;
+			/* los siguientes valores son independientes del tamaño del círculo */
+			background-repeat: no-repeat;
+			background-position: 50%;
+			border-radius: 50%;
+			background-size: 100% auto;
+		}
+	</style>
+</head>
+<body>
+	<div data-role="page" data-theme="a" id="Login">
+		
+		<div data-role="content" data-theme="a" style="padding:0">
+			<img src="themes/images/Imagen.png" width="100%" height="80%"/>
+            <table width="100%" cellpadding="0" cellspacing="0">
+            	<tr>
+                	<td colspan="2" height="5px">&nbsp;</td>
+            	</tr>
+            	<tr>
+                	<td align="center"><img src="themes/images/QRLogin.png"/></td>
+                    <td align="center"><img src="themes/images/BotonScan.png" id="btnIngresar" name="btnIngresar"/>
+</td>
+                </tr>
+            </table>
+		</div>
+	</div>
+    
+   	<div data-role="page" data-theme="a" id="pageHomeEstudiante">
+		
+		<div data-role="content" data-theme="a" style="padding:0">
+        <!--<a href="" data-role="button" id="SaldoCredencial"></a>-->
+        <img src="themes/images/logo.png"/><br>
+        <div align="center" style="background-color:#CCC; height:auto; padding-top:5px; letter-spacing:6px"><font size="+1" style="text-align:center; color:#006">Credecial Estudiantil</font></div><br><br>	
+        <div style="border:solid; border-color:#09F;border-radius:8px;margin-left:12px; margin-right:12px;height:25px; padding-top:5px"><font size="2" style="margin-left:10px; color:#930"><b>Mauricio Gonzales</b></font><div class="avatar" style="background-image: url(themes/images/foto.jpg);float:left; margin-top:-32px; margin-left:-5px; width:50px; height:50px; border:solid #006"></div></div><hr color="#0099FF" align="center" size="2" width="90%" style="margin-top:12px"/><br>
+        <a href="#PageCategorias" id="Cafeteria" style="text-decoration:none; color:#933;"><!--<div style="border:solid #963; border-radius:8px;margin-left:12px; margin-right:12px; padding-left:12px; height:25px; padding-top:7px"><font size="2">Cafetería & Restaurante</font><img src="themes/images/Cafeteria.png" style="float:right; margin-top:-40px; position:relative;" width="90px" height="90px"/></div>--><img src="themes/images/OpcionCafeteria.png" width="100%" style="margin-right:12px;margin-left:5px"/></a>
+       
+        <a href="#" id="Biblioteca" style="text-decoration:none; color:#933"><!--<div style="border:solid #963; border-radius:8px;margin-left:12px; margin-right:12px; padding-left:12px; height:25px; padding-top:5px"><font size="2" style="margin-left:20px">Biblioteca</font><img src="themes/images/Biblioteca.png" style="float:left; margin-top:-35px" width="80px" height="80px"/></div>--><img src="themes/images/OpcionBiblioteca.png" width="100%" style="margin-right:12px;margin-left:5px"/></a><br><br>
+        <hr color="#0099FF" align="center" size="2" width="90%"/>
+            
+		
+            
+            
+            
+		</div>
+	</div>-->
+    
+    <div data-role="page" data-theme="a" id="pageConfirmacion">
+		<div data-role="header" data-position="inline">
+			<a href="#pageHomeEstudiante" data-role="button">Atras</a>
+            <h1></h1>
+		</div>
+		<div data-role="content" data-theme="a">
+			<p align="center"><font size="3"><b>GRACIAS POR COMPRAR EN LA CAFETERIA</b></font><br><br><br>LE FUE ASIGNADO EL TURNO <label id="lblTurno"></label></p>            
+		</div>
+	</div>
+    
+    <div data-role="page" data-theme="a" id="PageCategorias">
+		<div data-role="panel" id="myPanel" data-position="left" data-display="overlay" style="margin-top:225px"> 
+        	<ul data-role="listview" id="listarCategorias" data-icon="none">
+              
+            </ul>   
+        </div>
+        <div data-role="popup" id="popupProducto">
+            <a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-left">Close</a><br>
+            <input type="hidden" id="txtCodigoProductoHidden" name="txtCodigoProductoHidden"/>
+            <table width="100%" cellpadding="0" cellspacing="0" style="padding-right:10px">
+            	<tr>
+                	<td rowspan="2"><img src="themes/images/icon.png"/></td>
+                    <td><font size="-1"><b id="fontNombreProducto">Nombre</b></font></td>
+                </tr>
+                <tr>
+                	<td valign="top"><p><font size="2" style="">Tamaño personal</font><br><font size="2" style="">260mm</font><br><font size="2" style="">Embace enlatado</font></p></td>
+                </tr>
+                <tr>
+                	<td align="center"><font color="#FF0000">$</font><font color="#FF0000" id="fontPrecioPopup">1200</font></td>
+                </tr>
+                <tr>
+                	<td align="center"><font size="1"><b>CANTIDADES:</b></font></td>
+                </tr>
+                <tr>
+                	<td colspan="2" align="left"><table width="50%" height="10px" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td align="right" width="20%" class="inputMenos"><input type="button" id="btnMenosPopup" name="btnMenosPopup" style="" value="-" class="botonMenosPopup" data-fila=""/></td>
+                            <td align="center" width="20%"><input value="1" style="width:100%; text-align:center; margin-left:2px" id="txtCantidadPopup" name="txtCantidadPopup" type=""/></td>
+                            <td width="20%" class="inputMas"><input type="button" id="btnMasPopup" name="btnMasPopup" data-max="0" value="+" style="margin-left:3px" class="botonMasPopup" data-fila=""/></td>
+                        </tr>
+                        <!--<tr>
+                            <td colspan="3" align="center" style="visibility:hidden"><button type="button" id="btnAgregarPopup" name="btnAgregarPopup" data-codigoProducto="" class="botonAgregarPopup" data-fila="" style="width:90%; margin-top:5px"><font size="-1">Agregar</font></button><br><font color="#FF0000" id="fontErrorPopup">&nbsp;</font></td>
+                        </tr>-->
+                    </table></td>
+                </tr>
+                <tr>
+                	<td>&nbsp;</td>
+                    <td><img src="themes/images/good_or_tick.png" width="40%" id="btnAgregarProducto" name="btnAgregarProducto"/><img src="themes/images/stop.png" width="40%" id="btnCancelar" name="btnCancelar"/></td>
+                </tr>
+            </table>
+            <br>
+        </div>        
+        
+        <div data-role="popup" id="popupCarrito">
+            <a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-left">Close</a>
+            <div style="padding:10px 20px;">
+                <label for="txtTotal" class="">Total:</label>
+                <input type="text" name="txtTotal" id="txtTotal" value="0" placeholder="" data-theme="a" disabled>
+                <label for="txtSaldoRestante" class="">Saldo restante:</label>
+                <input type="text" name="txtSaldoRestante" id="txtSaldoRestante" value="0" placeholder="" data-theme="a" disabled>
+                <a id="btnPagar" name="btnPagar" href="#" data-role="button" data-icon="check">Pagar</a>
+            </div>
+        </div>
+        
+        
+        
+		<div data-role="content" id="contenidoHome" style="margin:0;padding:0;background-image:url(themes/images/fondo2.png); background-repeat:no-repeat; background-size:100% 100%">
+        	<div style="background-color:#CCC; height:30px; position:absolute; width:100%; top:10px"><img src="themes/images/logo.png" style="margin-top:-15px" width="106px" height="70px"/><font size="+1" style="text-align:center; position:absolute; color:#006; top:5px;  letter-spacing:1px">Credecial Estudiantil</font><a href="#popupCarrito" data-role="button" id="btnPopupCarrito" data-rel="popup" data-theme="a" style="float:right;margin-top:-2px; margin-right:5px" data-icon="check" data-iconpos="notext">Carrito</a></div>
+			  <br><br><br>
+               <div style="width:100%; height:30px; background-color:#FFF">
+<div class="avatar" style="background-image: url(themes/images/foto.jpg);float:left; margin-left:15px; width:50px; height:50px; border:solid #006;margin-top:-3px"></div>	<font size="3" style="margin-left:10px; color:#666; position:absolute;margin-top:10px"><b>Mauricio Gonzales</b></font>
+               </div>
+               <table>
+               		<tr>
+                		<td><font size="2" style="margin-left:5px; color:#666; margin-top:7px; font-weight:bold">SALDO $</font></td>
+                        <td width="5px">&nbsp;</td>
+                        <td align="center" style="background-color:#666; width:90px; border-radius:8px; height:25px; color:#FFF; font-size:12px;" valign="middle"> 20000.oo</div></td>
+                	</tr>
+               </table>
+               <br>
+               <div style="border:solid #963; border-radius:8px;margin-left:12px; margin-right:12px; padding-left:12px; height:25px; padding-top:7px; font-weight:bolder"><font size="2" color="#933">Cafetería & Restaurante</font><img src="themes/images/Cafeteria.png" style="float:right; margin-top:-40px; position:relative;" width="90px" height="90px"/></div>
+               <hr color="#999999" align="center" size="2" width="90%"/>
+               <a href="#myPanel" class="ui-btn ui-btn-inline ui-corner-all ui-shadow" id="openPanel"><img src="themes/images/botonMenu.png" width="40"/></a>
+               <br>
+               <div style="" id="TablaProductos" align="center">
+               		<!--<div style="width:40%; border:solid 4px #CCC;display: inline-block; margin-top:5px; background-color:#FFF" align="center">
+                        <img src="themes/images/icon.png" width="60%"/><br>
+                        <font size="-1" id="fontNombre"><b>Nombre</b></font><br>
+                        <font color="#FF0000">$</font><font color="#FF0000" id="fontPrecio">1200</font><br>
+                        <font size="1"><b>CANTIDADES:</b></font><br>
+                        
+                        <div style="display: inline-block;margin:0;">
+                        	
+                           <table width="80%" height="10px" cellpadding="0" cellspacing="0" align="center">
+                                <tr>
+                                    <td align="right" width="20%"><input type="button" id="btnMenos" name="btnMenos" style="" value="-" class="botonMenos" data-fila=""/></td>
+                                    <td align="center" width="20%"><input value="1" style="width:100%; text-align:center" id="txtCantidad" name="txtCantidad" type="" value="1"/></td>
+                                    <td width="20%"><input type="button" id="btnMas" name="btnMas" data-max="" value="+" style="" class="botonMas" data-fila=""/></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" align="center"><button type="button" id="btnAgregar" name="btnAgregar" data-codigoProducto="" class="botonAgregar" data-fila="" style="width:90%; margin-top:5px"><font size="-1">Agregar</font></button><br><font color="#FF0000" id="fontError"></font></td>
+                                </tr>
+                            </table>
+                        </div>
+     
+                   </div>-->
+                   
+                  
+               </div>
+            </div>      
+            
+		</div>
+	</div>
+    
+    
+    <div data-role="page" data-theme="a" id="Productos">
+		<div data-role="header" data-position="inline">
+			<a href="#PageCategorias" data-role="button" data-icon="back">Atras</a>
+            <h1>PRODUCTOS</h1>
+            <a href="#popupCarrito" data-role="button" id="btnPopupCarrito" data-rel="popup" data-theme="a" class="ui-corner-all">Carrito</a>
+		</div>
+		<div data-role="content" data-theme="a">
+			 
+           
+            <!--<div data-role="collapsible-set" id="listarCategorias" style="width:50%">
+
+               
+                
+            </div>      -->
+            
+            
+		</div>
+        
+        
+        
+        
+        
+        
+	</div>
+    <script type="text/javascript">
+    	
+    </script>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="barcodescanner.js"></script>
+   	<script type="text/javascript" src="themes/js/index.js"></script>
+    <script type="text/javascript">
+		app.initialize();
+		// Wait for device API libraries to load
+		//
+		$(document).ready(function() {
+			// Actualizamos el fondo al cargar la pagina
+			var screenWidth = $(window).width();
+			var screenHeight = $(window).height();
+			var dimension = screenWidth + "px " + screenHeight + "px";
+			
+			$( "#contenidoHome" ).css({
+			  "background-size": dimension
+			});
+			$(window).bind("resize", function() {
+				// Y tambien cada vez que se redimensione el navegador
+				var screenWidth = $(window).width();
+				var screenHeight = $(window).height();
+				var dimension = screenWidth + "px " + screenHeight + "px";
+				
+				$( "#contenidoHome" ).css({
+				  "background-size": dimension
+				});
+			});
+			
+			$("#btnAgregarProducto").click(function(e) {
+            	//alert($("#fontPrecioPopup").html());
+				var cantidadActual = parseInt($("#txtCantidadPopup").val());
+				var precio = parseInt($("#fontPrecioPopup").html());
+				var nombre = $("#fontNombreProducto").html();
+				var codigoProducto = $("#txtCodigoProductoHidden").val();
+				var total = cantidadActual * precio;
+				saldoActual = saldoActual - (cantidadActual * precio);
+				jsonCarrito.push(
+						{codigoProducto: codigoProducto, nombre: nombre, cantidad: cantidadActual, precioUnitario: precio, total: total}
+					);
+				console.log(jsonCarrito);
+				$("#txtTotal").val(Obtener_Total())
+				$("#txtSaldoRestante").val(saldoActual)
+				$( "#popupProducto" ).popup( "close" );
+				$( "#popupCarrito" ).popup( "open" );
+				$("#txtTotal").val(Obtener_Total())
+				alert("Producto agreado con exito");
+				EnviarDatos({codigoProducto: codigoProducto, cantidad: cantidadActual}, "http://181.55.254.193/ssca/ActionDisminuirStock.php", "");
+				
+            });
+			$("#btnCancelar").click(function(e) {
+                $( "#popupProducto" ).popup( "close" );
+            });
+			
+			var string1 = $(".inputMas div").html();
+			var string2 = $(".inputMenos div").html();
+			console.log(string1.substr(1))
+			console.log(string2.substr(1))
+			$(".inputMas div").html(string1.substr(1))
+			$(".inputMenos div").html(string2.substr(1))
+			
+			$(".botonAgregar").removeClass("ui-btn");
+			
+			$("#openPanel").removeClass("ui-btn");//ui-btn ui-btn-inline ui-corner-all ui-shadow ui-btn-active
+			$("#openPanel").removeClass("ui-btn-inline");
+			$("#openPanel").removeClass("ui-corner-all");
+			$("#openPanel").removeClass("ui-shadow");
+			$("#openPanel").removeClass("ui-btn-active");
+			$("td div").removeClass("ui-btn");
+			$("td div").removeClass("ui-input-btn");
+			$("td div").removeClass("ui-corner-all");
+			$("td div").removeClass("ui-shadow");
+			
+			$("#btnMenosPopup").click(function(e) {
+                var cantidadActual = $("#txtCantidadPopup").val();
+					
+				var numero = parseInt(cantidadActual);
+				if(numero > 1){
+					numero -= 1;
+					$("#txtCantidadPopup").val(numero)
+					$("#fontErrorPopup").html("")
+					$("#btnAgregarPopup").css({display: "block"});
+				}
+            });
+			$("#btnMasPopup").click(function(e) {
+                var cantidadActual = $("#txtCantidadPopup").val();
+				var numero = parseInt(cantidadActual);
+				var precio = parseInt($("#fontPrecioPopup").html());
+				var CantidadMaxima = parseInt($(this).attr("data-max"));
+				//var saldoAux = saldoActual - (cantidadActual * precio);; 
+				
+				if(numero < CantidadMaxima){
+					numero += 1;
+					//if((numero * precio) <= saldoActual){
+						$("#btnAgregarPopup").css({display: "block"});
+						$("#txtCantidadPopup").val(numero)
+						console.log(saldoActual + " - " + (numero * precio));
+						
+						$("#fontErrorPopup").html("")
+					/*}else{
+						//$("#btnAgregar").css({display: "none"});
+						$("#fontError").html("El saldo actual es de " + saldoAux + ". No es suficiente para agregar mas productos")
+					}*/
+				}
+            });
+		});
+		
+		
+		$("#openPanel").click(function(e) {
+			EnviarDatos({}, "http://181.55.254.193/ssca/ActionListarCategorias.php", "LISTARCATEGORIAS");
+			$("#myPanel").css({"height": "auto"});
+        });
+		
+		$( "#myPanel" ).panel({
+			open: function( event, ui ) {
+				$("#openPanel").css({"margin-left": ($("#myPanel").width() - 60) + "px"});
+			},
+			close: function( event, ui ) {
+				$("#openPanel").css({"margin-left": "0px"});
+			}
+		});
+		
+		/*$("#btnIngresar").click(function(e) {
+            var idCredencial = "55799a6f-87e9-11e5-9212-c4da260350a1";
+			var datos = {
+				usuario: idCredencial			
+			}	
+			
+			EnviarDatos(datos, "http://181.55.254.193/ssca/ActionIniciarSesionAPP.php", "USUARIOSESIONAPP");
+        });*/
+		
+		$("#btnPopupCarrito").click(function(e) {
+			if(parseInt($("#txtTotal").val()) == 0){
+				$("#btnPagar").css({display: "none"});
+			}
+		});
+		$("#btnPagar").click(function(e) {
+			var idCredencialSesion = localStorage.getItem("idCredencialSesion"); 
+			var usuario = localStorage.getItem("idUsuarioApp"); 
+			var total = $("#txtTotal").val()
+			var descripcion = Obtener_Descripcion();
+			console.log(idCredencialSesion);
+			/*
+				Descripcion: Obtener fecha y hora para registrar movimientos
+			*/
+			var date = new Date();
+			var dia = date.getDate();
+			var mes = (date.getMonth() + 1);
+			var year = date.getFullYear();
+			
+			if(dia < 10) {
+				dia = '0' + dia;
+			} 
+			
+			if(mes < 10) {
+				mes = '0' + mes;
+			} 
+			
+			var fechaActual = year + "-" + mes + "-" + dia;
+			var horaActual = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds(); 
+			//jQuery.mobile.changePage("#PageMensaje");	
+			var datos = {
+				idCredencial: idCredencialSesion,
+				usuario: usuario,
+				descripcionPedido: descripcion,
+				ubicacionPedido: "ALISTAMIENTO",
+				fecha: fechaActual,
+				hora: horaActual,
+				total: total		
+			}	
+			
+			EnviarDatos(datos, "http://181.55.254.193/ssca/ActionInsertarPedido.php", "CREARPEDIDO");
+        });
+		function Obtener_Descripcion(){
+			var descripcion = "";
+			
+			$.each(jsonCarrito, function(i, item) {
+				descripcion += jsonCarrito[i].cantidad + " " + jsonCarrito[i].nombre + " ";
+			});	
+			return descripcion;
+		}
+		
+	</script>
+</body>
+</html>
