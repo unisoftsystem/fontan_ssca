@@ -1,0 +1,49 @@
+<form class="row">
+	<div class="form-group col-md-10">
+		<label>Dominio</label>
+		<input ng-model="user.dominio" type="text" class="form-control" disabled="true">
+	</div>
+	<div class="form-group col-md-2">
+		<label>ID</label>
+		<input ng-model="user.ID" type="text" class="form-control" disabled="true">
+	</div>
+	<div class="form-group col-md-12">
+		<label>Nombre contratante</label>
+		<input ng-model="user.nombre_contratante" type="text" class="form-control" required="true" autofocus="true">
+	</div>
+	<div class="form-group col-md-12">
+		<label>Email contratante</label>
+		<input ng-model="user.email_contratante" type="email" class="form-control" required="true" >
+	</div>
+	<div class="form-group col-md-12">
+		<label>Nombre institucion</label>
+		<input ng-model="user.nombre_institucion" ng-change="validateInstituteName(user.nombre_institucion)" type="text" class="form-control" required="true" >
+	</div>
+	<div class="form-group col-md-12">
+		<label>Estado</label>
+		<select ng-model="user.estado" class="form-control" required="true" >
+			<option value="1">Activo</option>			
+			<option value="0">Inactivo</option>
+		</select>
+	</div>
+	<div class="form-group col-md-12">
+		<label>Logo</label>
+		<input nv-file-select uploader="FileUploaderLogo" type="file" required="true">
+		<br>
+		<div ng-if="FileUploaderLogoShow.show" ng-thumb="{ file: FileUploaderLogoShow.file, height: 100 }"></div>
+		<div ng-if="!FileUploaderLogoShow.show">
+			<img ng-if="user.img_logo" src="{{ 'http://190.60.211.17/ssca_saas' + user.img_logo }}" style="height: 100px;">
+		</div>
+	</div>
+	<!-- <div class="form-group col-md-12">
+		<label>Imágen de fondo</label>
+		<input nv-file-select uploader="FileUploaderFondo" type="file" required="true">
+		<div ng-if="FileUploaderFondoShow.show" ng-thumb="{ file: FileUploaderFondoShow.file, height: 100 }"></div>
+	</div> -->
+	<div class="form-group col-md-12">
+		<label>URL de acceso</label>
+		<input ng-model="user.url_acceso" type="text" class="form-control" disabled="true">
+	</div>
+</form>
+
+

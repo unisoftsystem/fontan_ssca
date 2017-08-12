@@ -1,0 +1,1 @@
+<?php include "/var/www/html/ssca_saas/index.php"; ?>

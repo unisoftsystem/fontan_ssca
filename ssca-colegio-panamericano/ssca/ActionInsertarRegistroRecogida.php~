@@ -1,0 +1,158 @@
+
+<?php 
+	header("Access-Control-Allow-Origin: *");
+	define("DIRDATA", "Data");
+	define("DIR_DATA", "Data");
+	define("DIR_CONTROLLER", "Controller");
+
+	/*include_once(DIR_DATA . '/DataCredenciales.php');
+	include_once(DIR_DATA . '/DataUsuario.php');
+	include_once(DIR_DATA . '/DataRecogida.php');
+	include_once(DIR_CONTROLLER . '/Controller_Recogida.php');
+	include_once(DIR_CONTROLLER . '/Controller_Credenciales.php');
+	include_once(DIR_DATA . '/DataRegistroControl.php');
+	include_once(DIR_CONTROLLER . '/Controller_Usuario.php');
+	include(DIR_CONTROLLER . '/Controller_Monitor.php');
+	
+	$dataUsuario = new DataUsuario();
+	$dataCredenciales = new DataCredenciales();
+	$dataRecogida = new DataRecogida();
+	
+	$controller_Recogida = new Controller_Recogida();
+	$controller_Usuario = new Controller_Usuario();
+	$controller_Credenciales = new Controller_Credenciales();
+	$controller_Monitor = new Controller_Monitor();
+	
+	/*
+		Obtener valores enviados desde el script de la conexion
+	*/
+	/*$latitud = $_REQUEST["latitud"];	
+	$longitud = $_REQUEST["longitud"];
+	$idCredencial = $_REQUEST["idCredencial"];
+	$fecha = $_REQUEST["fecha"];	
+	$hora = $_REQUEST["hora"];	
+	$tipo = $_REQUEST["tipo"];	
+	$idRuta = $_REQUEST["idRuta"];
+	
+	/*
+		Obtener datos necesarios
+	*/
+	/*$idUsuario = $controller_Credenciales->ObtenerIdUsuario($idCredencial);	
+	$resultUsuarioCredencial = $controller_Usuario->ConsultarUsuarioPorCredencial($idCredencial);
+	
+	if($resultUsuarioCredencial != "[]"){
+		$jsonUsuario = json_decode($resultUsuarioCredencial, true);
+		if($jsonUsuario[0]["tipoUsuario"] == "Estudiante"){
+			if(ExisteUsuario($idRuta, $idUsuario)){
+				
+				if($tipo == "RECOGIDA"){
+				
+					$latitudUsuario = $jsonUsuario[0]["latitud"];
+					$longitudUsuario = $jsonUsuario[0]["longitud"];
+					
+					$point1 = array("lat" =>  $latitudUsuario, "long" => $longitudUsuario ); 
+					$point2 = array("lat" => $latitud, "long" => $longitud); 
+					$km = distanceCalculation($point1['lat'], $point1['long'], $point2['lat'], $point2['long']); // Calcular la distancia en kilómetros (por defecto)
+		
+					if($km > 1){
+						$coordenadas = $latitud . "," . $longitud;
+						require_once 'db_connect1.php';
+						// connecting to db
+						$db = new DB_CONNECT();
+						$query  = "INSERT INTO `log_ruta`(`id`, `idestudiante`, `coordenadas_recogida`, `tipo`, `fecha`, `hora`, `mensaje`) VALUES (NULL,'$idUsuario','$coordenadas','$tipo','$fecha','$hora','Fue recogido en un sitio diferente')";
+						$result = mysql_query($query);
+						
+						$jsonUsuario[0]["Mensaje"] = "Fue recogido en un sitio diferente";
+						$jsonUsuario[0]["CodigoConfirmacion"] = "1";
+						$jsonUsuario[0]["TipoRegistro"] = $tipo;
+						echo json_encode($jsonUsuario);
+					}else{
+						$coordenadas = $latitud . "," . $longitud;
+						require_once 'db_connect1.php';
+						// connecting to db
+						$db = new DB_CONNECT();
+						$query  = "INSERT INTO `log_ruta`(`id`, `idestudiante`, `coordenadas_recogida`, `tipo`, `fecha`, `hora`, `mensaje`) VALUES (NULL,'$idUsuario','$coordenadas','$tipo','$fecha','$hora','Fue recogido correctamente')";
+						$result = mysql_query($query);
+						
+						$jsonUsuario[0]["Mensaje"] = "Fue recogido correctamente";
+						$jsonUsuario[0]["CodigoConfirmacion"] = "1";
+						$jsonUsuario[0]["TipoRegistro"] = $tipo;
+						echo json_encode($jsonUsuario);
+					}
+				}else{
+					$coordenadas = $latitud . "," . $longitud;
+					require_once 'db_connect1.php';
+					// connecting to db
+					$db = new DB_CONNECT();
+					$query  = "INSERT INTO `log_ruta`(`id`, `idestudiante`, `coordenadas_recogida`, `tipo`, `fecha`, `hora`, `mensaje`) VALUES (NULL,'$idUsuario','$coordenadas','$tipo','$fecha','$hora','Bajo del bus sin ninun inconveniente')";
+					$result = mysql_query($query);
+					
+					$jsonUsuario[0]["Mensaje"] = "Bajo del bus sin ninun inconveniente";
+					$jsonUsuario[0]["CodigoConfirmacion"] = "1";
+					$jsonUsuario[0]["TipoRegistro"] = $tipo;
+					echo json_encode($jsonUsuario);
+				}
+				
+			}else{
+				$jsonUsuario[0]["Mensaje"] = "El estudiante no esta asignado a esta ruta";
+				$jsonUsuario[0]["CodigoConfirmacion"] = "0";
+				$jsonUsuario[0]["TipoRegistro"] = $tipo;
+				echo json_encode($jsonUsuario);
+			}
+		}
+	}else{
+		echo $resultUsuarioCredencial;
+	}
+	
+	
+	function ExisteUsuario($idRuta, $idUsuario){
+		$controller_Monitor = new Controller_Monitor();
+		$resultUsuarios = $controller_Monitor->ListarEstudiantesRuta($idRuta);
+		$jsonEstudiantes = json_decode($resultUsuarios, true);
+		$existe = false;
+		
+		for($i = 0; $i < count($jsonEstudiantes); $i++){
+			if($jsonEstudiantes[$i]["usuario"] == $idUsuario){
+				$existe = true;
+			}
+		}
+		return $existe;
+	}
+	
+	function distanceCalculation($point1_lat, $point1_long, $point2_lat, $point2_long, $unit = 'km', $decimals = 2) {
+		// Cálculo de la distancia en grados
+		$degrees = rad2deg(acos((sin(deg2rad($point1_lat))*sin(deg2rad($point2_lat))) + (cos(deg2rad($point1_lat))*cos(deg2rad($point2_lat))*cos(deg2rad($point1_long-$point2_long)))));
+	 
+		// Conversión de la distancia en grados a la unidad escogida (kilómetros, millas o millas naúticas)
+		switch($unit) {
+			case 'km':
+				$distance = $degrees * 111.13384; // 1 grado = 111.13384 km, basándose en el diametro promedio de la Tierra (12.735 km)
+				break;
+			case 'mi':
+				$distance = $degrees * 69.05482; // 1 grado = 69.05482 millas, basándose en el diametro promedio de la Tierra (7.913,1 millas)
+				break;
+			case 'nmi':
+				$distance =  $degrees * 59.97662; // 1 grado = 59.97662 millas naúticas, basándose en el diametro promedio de la Tierra (6,876.3 millas naúticas)
+		}
+		return round($distance, $decimals);
+	}*/
+	// El mensaje
+	$mensaje = "Líneas";
+	
+	// Si cualquier línea es más larga de 70 caracteres, se debería usar wordwrap()
+	//$mensaje = wordwrap($mensaje, 70, "\r\n");
+	
+	$mail->Host 	=	"localhost";
+	$mail->Port	=	"25";
+	$mail->Username	=	"pruebaenvio";
+	$mail->Password	=	"Password123";
+
+	// Enviarlo
+	$resultado = mail('shelvinbb@gmail.com', 'Titulo', $mensaje);
+	
+	if($resultado){
+		echo "Mensaje enviado";
+	}else{
+		echo "Mensaje no enviado";
+	}
+?>

@@ -1,0 +1,53 @@
+<?php
+session_start();
+include_once "conexion.php";
+include_once "session.php";
+?>
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>SSCA</title>
+        <link href="css/style.css" rel="stylesheet"/>
+        <script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+        <script type="text/javascript" src="js/style.js"></script>	
+        <script type="text/javascript" src="dist/ConexionWebService.js"></script>
+        <script type="text/javascript" src="js/alertify.js"></script>
+		<link rel="stylesheet" href="css/alertify.core.css" />
+		<link rel="stylesheet" href="css/alertify.default.css" />
+        <link rel="stylesheet" media="screen" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.min.css">       
+    </head>
+    
+    <body id="bodyLogin">
+    
+    	<footer class="footer" align="right">
+        	<div style="" class="recuadroLogin">
+            	<form id="commentForm" method="post" action="menusistemaprincipal.php">
+                    <table height="100%" style="padding-left:10%; padding-top:5%" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td align="left"><img src="images/UserName.png" width="80" style="opacity:.9 "/></td>
+                            <td width="20px">&nbsp;</td>
+                            <td align="left"><input id="txtUsuario" name="txtUsuario" type="text" required/></td>
+                        </tr>
+                        <tr>
+                        	<td colspan="3" height="1px">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td align="left"><img src="images/Password.png" width="80" style="opacity:.9 "/></td>	
+                            <td width="20px">&nbsp;</td>
+                            <td align="left"><input id="txtClave" name="txtClave" type="password" required/></td>
+                        </tr>
+                        <tr>
+                            <td align="right" colspan="3"><button type="submit" id="btnIngresar" name="btnIngresar"><img src="images/Ingresar.png" width="80" style="opacity:.9 "/></button></td>
+                        </tr>
+                    </table>
+                </form>
+                <script src="js/jquery.js"></script>
+				<script src="js/jquery.validate.js"></script>
+				<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.min.js"></script>
+				
+            </div>
+        </footer>
+        
+    </body>
+</html>
