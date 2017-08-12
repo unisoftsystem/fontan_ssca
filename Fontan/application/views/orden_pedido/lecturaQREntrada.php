@@ -291,6 +291,11 @@
 	                  			$("#foto").attr("src", "<?= base_url();?>" + json[0].ImagenFotografica);
 	                  			$("#Datos").html(json[0].mensaje);
 	                			$('#popup').fadeIn('slow');
+
+	                			setTimeout(function(){ 
+	                				$('#popup').fadeOut('slow');
+									$('.popup-overlay').fadeOut('slow');
+	                			}, 2500);
 							}
 							contador++;
 						});
@@ -355,7 +360,7 @@
        		$('#close').click(function(){
 				$('#popup').fadeOut('slow');
 				$('.popup-overlay').fadeOut('slow');
-				window.location.href = "../ordenpedido/lecturaQREntrada";
+				//window.location.href = "../ordenpedido/lecturaQREntrada";
 				return false;
 			}); 
         	window.addEventListener('load',init);
