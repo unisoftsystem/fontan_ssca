@@ -3312,18 +3312,12 @@ class Rutas extends CI_Controller {
 		$DB_TBLName = "log_ruta";
 		$filename = "Reporte log ruta ".$_GET['f'];
 		 // mensaje != 'geolocalizacion and' 
-		$sql = sprintf("
-			Select 
-				CONCAT(PrimerApellido, ' ', SegundoApellido, ' ', PrimerNombre, ' ', SegundoNombre) as 'Nombre estudiante', 
-				hora as Hora,
-				mensaje as Mensaje,
-				idruta as 'Id ruta',
-				(SELECT nombre_ruta FROM vehiculo WHERE idVehiculo = a.idruta) as 'Nombre ruta'
-			from %s a
-			inner join usuarios
-			on usuarios.NumeroId = a.idestudiante 
-			where fecha = '%s' and mensaje <> 'geolocalizacion'", 
-			$DB_TBLName, $_GET['f']);
+		$sql = sprintf("SELECT CONCAT(PrimerApellido, ' ', SegundoApellido, ' ', PrimerNombre, ' ', SegundoNombre) as 'Nombre', hora AS 'Hora', 
+		tipo as 'Categoría mensaje', mensaje AS 'Mensaje', nombreruta As 'Ruta' 
+		FROM log_ruta a
+		LEFT JOIN usuarios ON usuarios.idUsuario = a.idestudiante
+		LEFT JOIN asignacionruta ON asignacionruta.id = a.idruta
+		WHERE fecha = '%s' AND mensaje NOT LIKE 'geolocalizacion'", $_GET['f']);
 		
 		$Connect = @mysql_connect($DB_Server, $DB_Username, $DB_Password) or die("Couldn't connect to MySQL:<br>" . mysql_error() . "<br>" . mysql_errno());
 		$Db = @mysql_select_db($DB_DBName, $Connect) or die("Couldn't select database:<br>" . mysql_error(). "<br>" . mysql_errno());   
