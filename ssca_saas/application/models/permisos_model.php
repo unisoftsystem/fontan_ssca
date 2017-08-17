@@ -32,7 +32,7 @@ class Permisos_model extends CI_Model
 	function getPermiso($usuario, $fecha, $tipo, $hora = null){
 		$sql = sprintf("SELECT * FROM `permiso` WHERE `idUsuario`='%s' 
 			AND `Fecha`='%s'AND `Estado`='ACTIVO' AND `Tipo`='%s'", $usuario, $fecha, $tipo);
-		$sql .= ($hora != null) ? sprintf(" AND`Hora`<='%s'", $hora);
+		$sql .= ($hora != null) ? sprintf(" AND`Hora`<='%s'", $hora) : '';
 		$sql .= " ORDER BY `Fecha`, `Hora` DESC LIMIT 1";
 
 		$data = $this->db->query($sql);
