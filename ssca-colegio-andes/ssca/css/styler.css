@@ -1,0 +1,72 @@
+@charset "utf-8";
+/* CSS Document */
+* {
+	padding:0;
+	margin:0;
+}
+
+#bodyLogin{
+	background-image:url(../images/ssca.png);
+	background-repeat:no-repeat;
+	overflow:auto;
+}	
+#bodyBase{
+	background-image:url(../images/base-menu.png);
+	background-repeat:no-repeat;
+	overflow:auto;
+}
+footer { 
+	position: fixed; 
+	bottom: 7%; 
+	right:10%;
+}
+footer #footerMenu{ 
+	position: fixed; 
+	bottom: 7%; 
+	right:10%;
+}
+div.recuadroLogin {
+	background-color:#999; 
+	opacity:0.5; 
+	width:400px; 
+	height:130px; 
+	border:solid #CCC;
+	
+}
+.recuadroLogin form table tr td input{
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -o-appearance: none;
+    height: 30px;
+    width: 200px;
+    background: #666;
+    color: #FFF;
+	border: none;
+	opacity:1;
+	-webkit-box-shadow: 2px 2px 5px #999;
+	-moz-box-shadow: 2px 2px 5px #999;
+	filter: shadow(color=#CCC, direction=135, strength=2);
+	padding-left:12px;
+	font-size:14px;
+}
+.recuadroLogin form table tr td button{
+	background-color:transparent; 
+	border:0;
+	margin-top:10px;
+}
+
+@media screen { 
+	div.footer { 
+		position: fixed; 
+		bottom: 7%; 
+		right:10%;
+	} 
+} 
+@media print { 
+	div.footer { 
+		position: fixed; 
+		bottom: 7%; 
+		right:10%;
+	} 
+} 

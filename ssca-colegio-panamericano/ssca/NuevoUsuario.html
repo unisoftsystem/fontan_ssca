@@ -1,0 +1,728 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Nuevo Usuario</title>
+<link href="css/popup.css" rel="stylesheet"/>
+<link href="css/style.css" rel="stylesheet"/>
+<link href="css/menu.css" rel="stylesheet"/>
+<link href="css/styleQR.css" rel="stylesheet"/>
+<link rel="stylesheet" href="css/alertify.core.css" />
+<link rel="stylesheet" href="css/alertify.default.css" />
+<script type="text/javascript" src="js/alertify.js"></script>
+<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="js/ConexionWebService.js"></script>
+<script type="text/javascript" src="js/popup.js"></script>
+<script type="text/javascript" src="js/style.js"></script>	
+ <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script> 
+<link rel="stylesheet" media="screen" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.min.css">
+<link rel="stylesheet" href="css/bootstrap.min.css">
+
+<style>
+	input{
+		border-radius:7px;
+	}
+</style>
+<script type="text/javascript">
+ //Declaramos las variables que vamos a user
+ var lat = null;
+ var lng = null;
+ var map = null;
+ var geocoder = null;
+ var marker = null;
+          
+ jQuery(document).ready(function(){
+      //obtenemos los valores en caso de tenerlos en un formulario ya guardado en la base de datos
+      lat = jQuery('#lat').val();
+      lng = jQuery('#long').val();
+      //Asignamos al evento click del boton la funcion codeAddress
+      jQuery('#pasar').click(function(){
+         codeAddress();
+         return false;
+      });
+      //Inicializamos la función de google maps una vez el DOM este cargado
+     initialize();
+ });
+      
+     function initialize() {
+      
+       geocoder = new google.maps.Geocoder();
+         
+        //Si hay valores creamos un objeto Latlng
+        if(lat !='' && lng != '')
+       {
+          var latLng = new google.maps.LatLng(lat,lng);
+       }
+       else
+       {
+          var latLng = new google.maps.LatLng(4.710988599999999,-74.072092);
+       }
+       //Definimos algunas opciones del mapa a crear
+        var myOptions = {
+           center: latLng,//centro del mapa
+           zoom: 15,//zoom del mapa
+           mapTypeId: google.maps.MapTypeId.ROADMAP //tipo de mapa, carretera, híbrido,etc
+         };
+         //creamos el mapa con las opciones anteriores y le pasamos el elemento div
+         map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+          
+         //creamos el marcador en el mapa
+         marker = new google.maps.Marker({
+             map: map,//el mapa creado en el paso anterior
+             position: latLng,//objeto con latitud y longitud
+             draggable: true //que el marcador se pueda arrastrar
+         });
+         
+        //función que actualiza los input del formulario con las nuevas latitudes
+        //Estos campos suelen ser hidden
+         updatePosition(latLng);
+          
+          
+     }
+      
+     //funcion que traduce la direccion en coordenadas
+     function codeAddress() {
+          
+         //obtengo la direccion del formulario
+         var address = document.getElementById("txtDireccion").value;
+         //hago la llamada al geodecoder
+         geocoder.geocode( { 'address': address}, function(results, status) {
+          
+         //si el estado de la llamado es OK
+         if (status == google.maps.GeocoderStatus.OK) {
+             //centro el mapa en las coordenadas obtenidas
+             map.setCenter(results[0].geometry.location);
+             //coloco el marcador en dichas coordenadas
+             marker.setPosition(results[0].geometry.location);
+             //actualizo el formulario      
+             updatePosition(results[0].geometry.location);
+              
+             //Añado un listener para cuando el markador se termine de arrastrar
+             //actualize el formulario con las nuevas coordenadas
+             google.maps.event.addListener(marker, 'dragend', function(){
+                 updatePosition(marker.getPosition());
+             });
+       } else {
+           //si no es OK devuelvo error
+           alert("No podemos encontrar la direcci&oacute;n, error: " + status);
+       }
+     });
+   }
+    
+   //funcion que simplemente actualiza los campos del formulario
+   function updatePosition(latLng)
+   {
+        
+        jQuery('#lat').val(latLng.lat());
+        jQuery('#long').val(latLng.lng());
+    
+   }
+</script>
+<script type="text/javascript">
+
+  var gaq = gaq || [];
+  _gaq.push(['_setAccount', 'UA-1749329-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+</head>
+
+<body id="bodyBase">
+<h4 style="color:#CCC;margin-left:10px; margin-top:5px">Bienvenido(a): <label id="usuarioSesion"></label></h4>
+    <h2 align="right" style="margin-top:2%; margin-right:2%; color:#00C">Creaci&oacute;n de Usuarios</h2>
+	<div id='cssmenu'>
+		<ul>
+               <li class="" id="AdminUsuarios" style="display:none"><a href='#' title="Admin.Usuarios"><span>Admin.Usuarios</span></a>
+                    <ul style="margin-right:-42%">
+                         <li><a href='#' title="Usuarios Plataforma"><span>Usuarios Plataforma</span></a></li>
+                         <li class='last' title="Usuarios Aplicaciones"><a href='AdminUsuariosAplicaciones.html'><span>Usuarios Aplicaciones</span></a></li>
+					</ul>
+               </li>
+               <li class='' style="display:none" id="AdminCredenciales"><a href='#' title="Admin.Credenciales"><span>Admin.Credenciales</span></a>
+                  <ul style="margin-right:-42%">
+                     <li id="ReemplazoCredencial" style="display:none"><a href='ReemplazarCredencial.html' title="Reemplazo de credenciales"><span>Reemplazo de credenciales</span></a></li>
+                     <li class='last'><a href='AdminCredencial.html' title="Cambio de Estado"><span>Cambio de Estado</span></a></li>
+                     <li class='last'><a href='ConsultaMovimientosAcudiente.html' title="Consulta de Movimientos"><span>Consulta de Movimientos</span></a></li>
+                     <li class='last'><a href='ConsultaSaldo.html' title="Consulta de Saldos"><span>Consulta de Saldos</span></a></li>
+                     <li class='last'><a href='RecargueMonetarioAcudiente.html' title="Recarga en Linea"><span>Recarga en Linea</span></a></li>
+                     <li class='last'><a href='TrasladoCredencialAcudiente.html' title="Traslado de Fondos entre Credenciales"><span>Traslado de Fondos entre Credenciales</span></a></li>
+                  </ul>
+               </li>
+               <li class='' id="Liquidacion" style="display:none"><a href='#' title="Liquidaci&oacute;n y Pagos"><span>Liquidaci&oacute;n y Pagos</span></a>
+                  <ul style="margin-right:-42%">
+                    
+                  </ul>
+               </li>
+               <li class='' id="PuntosRecargue" style="display:none"><a href='#' title="Puntos de Recarga"><span>Puntos de Recarga</span></a>
+                  <ul style="margin-right:-42%">
+                     
+                  </ul>
+               </li>
+               <li class='' id="CentroOperacion" style="display:none"><a href='#' title="Centro - Operaciones Rutas"><span>Centro - Operaciones Rutas</span></a>
+                    <ul style="margin-right:-42%">
+                         <li><a href='' title="Vehiculos"><span>Vehiculos</span></a></li>
+                         <li><a href='CrearConductores.html' title="Conductores"><span>Conductores</span></a></li>
+                         <li><a href='#' title="Monitores"><span>Monitores</span></a></li>
+                         <li><a href='crearruta.php' title="v"><span>Rutas</span></a></li>
+                         <li><a href='#' title="Centro de Pagos"><span>Centro de Pagos</span></a></li>
+                         <li class='last' title="Tracking"><a href='menutracking.php'><span>Tracking</span></a></li>
+                    </ul>
+               </li>
+               <li class="" id="RutaEscolar" style="display:none"><a href='#' title="Ruta Escolar"><span>Ruta Escolar</span></a>
+                    <ul style="margin-right:-42%">
+                        
+					</ul>
+               </li>
+               <li class="" id="RestriccionConsumo" style="display:none"><a href='#' title="Restricci&oacute;n de Consumo"><span>Restricci&oacute;n de Consumo</span></a>
+                    <ul style="margin-right:-42%">
+                        
+					</ul>
+               </li>
+               <li class="" id="RecargueCredencial" style="display:none"><a href='ProcesoRecaudo.html' title="Recargue de Credenciales"><span>Recargue de Credenciales</span></a>
+                    <ul style="margin-right:-42%">
+                        
+					</ul>
+               </li>
+               <li class="" id="Reportes" style="display:none"><a href='ReporteRecaudo.html' title="Reportes"><span>Reportes</span></a>
+                    <ul style="margin-right:-42%">
+                        
+					</ul>
+               </li>
+               <li class="" id="Salir"><a href='#' title="Cerrar Sesi&oacute;n"><span>Cerrar Sesi&oacute;n</span></a>
+                    <ul style="margin-right:-42%">
+                        
+					</ul>
+               </li>
+            </ul>
+        </div>
+        <div class="contenidoBorde" align="center">
+        <form id="commentForm" method="post" action="#">
+            <table style="padding-left:4%; margin-right:20px;position:absolute; margin-top:5%; margin-left:4%; padding-right:20px" cellspacing="0" cellpadding="0" width="95%">
+                <tr>
+                    <td><label for="selectTipoId">Tipo de identificaci&oacute;n:</label></td>
+                    <td><select name="selectTipoId" id="selectTipoId">
+                        <!--<option value="Seleccione">Seleccione...</option>-->
+                        <option value="Registro Civil">Registro Civil</option>
+                        <option value="Tarjeta de identidad">Tarjeta de identidad</option>
+                        <option value="Cedula de ciudadania">C&eacute;dula de ciudadania</option>
+                    </select></td>  
+                    <td><label for="txtNumeroId">Numero de identificaci&oacute;n:</label></td>
+                    <td><input type="text" name="txtNumeroId" id="txtNumeroId" required/></td> 
+                    <td rowspan="6" valign="top" style="padding-left:10px">
+                        <img src="" id="imageFoto" name="imageFoto" width="128px" height="128px" required/><br>
+                        <label for="fileFoto">Captura de Fotografia</label><br>
+                        <video id="v" width="128px" height="128px"></video><br>
+                        <canvas id="c" width="128px" height="128px" style="display:none"></canvas><br>
+                        <button id="t" class="btn btn-primary">Tomar foto</button>	
+                        </td>
+                    </td>      
+                </tr>
+                <tr>
+                    <td><label for="txtPrimerApellido">Primer Apellido:</label></td>
+                    <td><input type="text" name="txtPrimerApellido" id="txtPrimerApellido" required/></td>   
+                    <td><label for="txtSegundoApellido">Segundo Apellido:</label></td>
+                    <td><input type="text" name="txtSegundoApellido" id="txtSegundoApellido" required/></td>           
+                </tr>
+                <tr>
+                    <td><label for="txtPrimerNombre">Primer Nombre:</label></td>
+                    <td><input type="text" name="txtPrimerNombre" id="txtPrimerNombre" required/></td> 
+                    <td><label for="txtSegundoNombre">Segundo Nombre:</label></td>
+                    <td><input type="text" name="txtSegundoNombre" id="txtSegundoNombre"/></td>           
+                </tr>
+                <tr>
+                       
+                    <td><label for="txtTelefono1">Tel&eacute;fono 1:</label></td>
+                    <td><input type="tel" name="txtTelefono1" id="txtTelefono1" required/></td>  
+                    <td><label for="txtTelefono2">Tel&eacute;fono 2:</label></td>
+                    <td><input type="tel" name="txtTelefono2" id="txtTelefono2"/></td>        
+                </tr>
+                <tr>
+                    
+                    <td><label for="selectTipoUsuario">Tipo de usuario:</label></td>
+                    <td><select name="selectTipoUsuario" id="selectTipoUsuario">
+                        <option value="Seleccione">Seleccione...</option>
+                        <option value="Estudiante">Estudiante</option>
+                        <option value="Acudiente">Acudiente</option>
+                        <option value="Funcionario">Funcionario</option>
+                    </select></td>        
+                </tr>
+                <tr style="visibility:hidden" id="rowAcudiente">
+                    <td valign="top"><label for="selectAcudiente">Acudiente asociado:</label></td>
+                    <td>
+                        <select name="selectAcudiente" id="selectAcudiente">
+             
+                        </select><br><a href="#open" id="open">Crear Acudiente</a>
+                    </td>        
+                </tr>
+                <tr>
+                	<td><label for="txtDirección">Direcci&oacute;n:</label></td>
+                    <td colspan="3"><input type="text" name="txtDirección" id="txtDireccion" style="width:100%;border-radius:0px" required/></td> 
+                </tr>
+                <tr>
+                	<td valign="top">&nbsp;</td>
+                	<td colspan="3"><form id="google" name="google" action="#">
+                      <!-- div donde se dibuja el mapa-->
+                      <div id="map_canvas" style="width:100%;height:400px;"></div>
+                       <br>
+                      <!--campos ocultos donde guardamos los datos-->
+                      <p style="display:none"><label>Latitud: </label><input type="text" readonly name="lat" id="lat"/></p>
+                      <p style="display:none"><label> Longitud:</label> <input type="text" readonly name="lng" id="long"/></p>
+                      </form></td>
+                      <td style="padding-left:10px"><button id="pasar" class="btn btn-primary">Obtener coordenadas</button> </td>
+                </tr>
+                <tr>
+                    <td><label for="txtUsuario">Usuario:</label></td>
+                    <td colspan="3"><input type="text" name="txtUsuario" id="txtUsuario" required/></td>        
+                </tr>
+                <tr>
+                    <td><label for="txtClave">Clave:</label></td>
+                    <td colspan="3"><input type="password" name="txtClave" id="txtClave" required/></td>        
+                </tr>
+                <tr>
+                    <td colspan="5" align="center"><p>-------- CREDENCIALES INTELIGENTES--------- OBLIGATORIO para: alumnos y funcionarios<br>VALOR BASE DE CARGUE ( $ <input type="number" name="txtRecarga" id="txtRecarga" value="1" min="1" required/> )</p>
+            </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td align="right" colspan="3"><button type="submit" name="btnCrearUsuario" id="btnCrearUsuario" class="btn btn-primary"><b>CREAR</b></button></td>
+                </tr>
+                
+                
+            </table>
+
+		</form>
+				<script src="js/jquery.validate.js"></script>
+				<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.min.js"></script>
+				<script>
+					function mensaje(mensaje){
+						alertify.error(mensaje);	
+					}
+					$.validator.setDefaults({
+						submitHandler: function() {
+							if($("#imageFoto").attr("src") != "" && $("#txtRecarga").val() != "0" && $("#selectTipoUsuario").val() != "Seleccione"){
+								//Se obtienen los datos a ingresar
+								var latitud = $("#lat").val()
+								var longitud = $("#long").val()
+								var tipoId = $("#selectTipoId").val();
+								var numeroId = $("#txtNumeroId").val();
+								var primerApellido = $("#txtPrimerApellido").val();
+								var segundoApellido = $("#txtSegundoApellido").val();
+								var primerNombre = $("#txtPrimerNombre").val();
+								var segundoNombre = $("#txtSegundoNombre").val();
+								var direccion = $("#txtDireccion").val();
+								var telefono1 = $("#txtTelefono1").val();
+								var telefono2 = $("#txtTelefono2").val();
+								var tipoUsuario = $("#selectTipoUsuario").val();
+								var usuarioIngresado = $("#txtUsuario").val();
+								var clave = $("#txtClave").val();
+								var saldo = $("#txtRecarga").val();
+								var idAcudiente = "";
+								//var dataURL = canvas.toDataURL("image/png");
+								var dataURL = $("#imageFoto").attr("src");
+								
+								/*
+									Descripcion: Obtener fecha y hora para registrar movimientos
+								*/
+								var date = new Date();
+								var dia = date.getDate();
+								var mes = (date.getMonth() + 1);
+								var year = date.getFullYear();
+								
+								if(dia < 10) {
+									dia = '0' + dia;
+								} 
+								
+								if(mes < 10) {
+									mes = '0' + mes;
+								} 
+								
+								var fechaActual = year + "-" + mes + "-" + dia;
+								var horaActual = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds(); 
+								
+								if(tipoUsuario == "Estudiante"){
+									idAcudiente = $("#selectAcudiente").val();
+								}else{
+									idAcudiente = numeroId;
+								}
+								
+								//Se guardan los datos en un JSON
+								var usuario = {
+									tipoId: tipoId,
+									numeroId: numeroId,
+									primerApellido: primerApellido,
+									segundoApellido: segundoApellido,
+									primerNombre: primerNombre,
+									segundoNombre: segundoNombre,
+									direccion: direccion,
+									telefono1: telefono1,
+									telefono2: telefono2,
+									tipoUsuario: tipoUsuario,
+									usuario: usuarioIngresado,
+									clave: clave,
+									idAcudiente: idAcudiente,
+									saldo: saldo,
+									fecha: fechaActual,
+									hora: horaActual,
+									imgBase64: dataURL,
+									latitud: latitud,
+									longitud: longitud
+								}		
+								
+								//Se envian a la funcion que realiza la conexion al werbservice y genera una respuesta que se guarda en un localstorage
+								//EnviarDatos(usuario, "ActionInsertarUsuario.php", "CREARUSUARIO");
+								console.log(dataURL);
+								$("#txtNumeroId").val("");
+								$("#txtPrimerApellido").val("");
+								$("#txtSegundoApellido").val("");
+								$("#txtPrimerNombre").val("");
+								$("#txtSegundoNombre").val("");
+								$("#txtDireccion").val("");
+								$("#txtTelefono1").val("");
+								$("#txtTelefono2").val("");
+								$("#selectTipoUsuario").val("");
+								$("#txtUsuario").val("");
+								$("#txtClave").val("");
+								$("#txtRecarga").val("");
+								$( "#rowAcudiente" ).css( "display", "none" );
+								
+								
+								
+								//Subir Foto al servidor
+								//EnviarDatos(datos, "ActionUploadFoto.php", "SUBIRFOTO");
+							}else{
+								var mensaje = "";
+								if($("#imageFoto").attr("src") == ""){
+									mensaje += "Por favor tomarse una foto antes de registrar un usuario\n";	
+								}
+								if($("#txtRecarga").val() == "0"){
+									mensaje += "Por favor ingrese un valor de la recarga\n";	
+								}
+								if($("#selectTipoUsuario").val() == "Seleccione"){
+									mensaje += "Por favor seleccione un tipo de usuario a registrar\n";	
+								}
+								alert(mensaje);
+							}
+							
+						},
+						showErrors: function(map, list) {
+							// there's probably a way to simplify this
+							var focussed = document.activeElement;
+							if (focussed && $(focussed).is("input, textarea")) {
+								$(this.currentForm).tooltip("close", {
+									currentTarget: focussed
+								}, true)
+							}
+							this.currentElements.removeAttr("title").removeClass("ui-state-highlight");
+							$.each(list, function(index, error) {
+								$(error.element).attr("title", error.message).addClass("ui-state-highlight");
+							});
+							if (focussed && $(focussed).is("input, textarea")) {
+								$(this.currentForm).tooltip("open", {
+									target: focussed
+								});
+							}
+						}
+					});
+					
+					(function() {
+						// use custom tooltip; disable animations for now to work around lack of refresh method on tooltip
+						$("#commentForm").tooltip({
+							show: false,
+							hide: false
+						});
+					
+						// validate the comment form when it is submitted
+						$("#commentForm").validate({
+							rules: {
+								txtNumeroId: "required",
+								txtClave: {
+									required: true,
+									minlength: 1
+								},
+								imageFoto: "required",
+								txtPrimerApellido: "required",
+								txtSegundoApellido: "required",
+								txtPrimerNombre: "required",
+								txtTelefono1: "required",
+								txtDirección: "required",
+								txtUsuario: "required",
+								txtRecarga: "required"
+							},
+							messages: {
+								txtNumeroId: "Por favor ingrese un numero de identificación",
+								txtClave: "Por favor ingrese una clave",
+								imageFoto: "Por favor tomarse una foto antes de registrar un usuario",
+								txtPrimerApellido: "Por favor ingrese el primer apellido",
+								txtSegundoApellido: "Por favor ingrese el segundo apellido",
+								txtPrimerNombre: "Por favor ingrese el primer nombre",
+								txtTelefono1: "Por favor ingrese al menos un numero de teléfono",
+								txtDirección: "Por favor ingrese una dirección",
+								txtUsuario: "Por favor ingrese un usuario",
+								txtRecarga: "Por favor ingrese un valor de la recarga"
+							}
+						});
+						return false;
+					})();
+				</script>
+    <!--
+    	Fecha: 			23 de Octubre de 2015
+        Descripcion: 	Codigo HTML del popup con el formulario para crear un acudiente
+    -->
+    <div id="popup" style="display: none;">
+        <div class="content-popup">
+            <div class="close"><a href="#" id="close"><img src="images/close.png"/></a></div>
+            <div>
+               <h2>Nuevo acudiente</h2>
+               <table align="center">
+            <tr>
+                <td><label for="selectTipoIdPopup">Tipo de identificaci&oacute;n:</label></td>
+                <td><select name="selectTipoIdPopup" id="selectTipoIdPopup">
+                    <!--<option value="Seleccione">Seleccione...</option>-->
+                    <option value="Cedula de ciudadania">C&eacute;dula de ciudadania</option>
+                    </select></td>        
+                </tr>
+                <tr>
+                    <td><label for="txtNumeroIdPopup">Numero de identificaci&oacute;n:</label></td>
+                    <td><input type="text" name="txtNumeroIdPopup" id="txtNumeroIdPopup"/></td>        
+                </tr>
+                <tr>
+                    <td><label for="txtPrimerApellidoPopup">Primer Apellido:</label></td>
+                    <td><input type="text" name="txtPrimerApellidoPopup" id="txtPrimerApellidoPopup"/></td>        
+                </tr>
+                <tr>
+                    <td><label for="txtSegundoApellidoPopup">Segundo Apellido:</label></td>
+                    <td><input type="text" name="txtSegundoApellidoPopup" id="txtSegundoApellidoPopup"/></td>        
+                </tr>
+                <tr>
+                    <td><label for="txtPrimerNombrePopup">Primer Nombre:</label></td>
+                    <td><input type="text" name="txtPrimerNombrePopup" id="txtPrimerNombrePopup"/></td>        
+                </tr>
+                <tr>
+                    <td><label for="txtSegundoNombrePopup">Segundo Nombre:</label></td>
+                    <td><input type="text" name="txtSegundoNombrePopup" id="txtSegundoNombrePopup"/></td>        
+                </tr>
+                <tr>
+                    <td><label for="txtDirecciónPopup">Direcci&oacute;n:</label></td>
+                    <td><input type="text" name="txtDirecciónPopup" id="txtDireccionPopup"/></td>        
+                </tr>
+                <tr>
+                    <td><label for="txtTelefono1Popup">Tel&eacute;fono 1:</label></td>
+                    <td><input type="tel" name="txtTelefono1Popup" id="txtTelefono1Popup"/></td>        
+                </tr>
+                <tr>
+                    <td><label for="txtTelefono2Popup">Tel&eacute;fono 2:</label></td>
+                    <td><input type="tel" name="txtTelefono2Popup" id="txtTelefono2Popup"/></td>        
+                </tr>
+                <tr>
+                    <td><label for="selectTipoUsuarioPopup">Tipo de usuario:</label></td>
+                    <td><input value="Acudiente" id="" name="" disabled/></td>        
+                </tr>
+                <tr>
+                    <td><label for="txtUsuarioPopup">Usuario:</label></td>
+                    <td><input type="text" name="txtUsuarioPopup" id="txtUsuarioPopup"/></td>        
+                </tr>
+                <tr>
+                    <td><label for="txtClavePopup">Clave:</label></td>
+                    <td><input type="password" name="txtClavePopup" id="txtClavePopup"/></td>        
+                </tr>            
+                <tr>
+                    <td>&nbsp;</td>
+                    <td align="right"><button type="button" name="btnCrearUsuarioPopup" id="btnCrearUsuarioPopup"><b>CREAR</b></button></td>
+                </tr>
+            </table>
+            </div>
+        </div>
+    </div>
+     
+  </div>
+<script type="text/javascript">
+	/*
+		Fecha: 			Octubre 21 de 2015
+		Descripcion: 	Script para enviar los datos al webservice para que los inserte en la base de datos
+	
+	*/
+	
+	//Valor guardado cuando se cierra un popup y se concreto una operación
+	var opcionSeleccionar = "";
+	var video = document.querySelector('#v'), canvas = document.querySelector('#c'), btn = document.querySelector('#t'), img = document.querySelector('#imageFoto');
+		
+	
+	
+	
+	/*
+		Fecha: 			Octubre 21 de 2015
+		Descripcion: 	Script para enviar los datos al webservice para que los inserte en la base de datos
+	
+	*/
+	//Capturar evento del boton crear del popup
+	$("#btnCrearUsuarioPopup").click(function(e) {
+		//Se obtienen los datos a ingresar
+		
+		var tipoId = $("#selectTipoIdPopup").val();
+		var numeroId = $("#txtNumeroIdPopup").val();
+		var primerApellido = $("#txtPrimerApellidoPopup").val();
+		var segundoApellido = $("#txtSegundoApellidoPopup").val();
+		var primerNombre = $("#txtPrimerNombrePopup").val();
+		var segundoNombre = $("#txtSegundoNombrePopup").val();
+		var direccion = $("#txtDireccionPopup").val();
+		var telefono1 = $("#txtTelefono1Popup").val();
+		var telefono2 = $("#txtTelefono2Popup").val();
+		var tipoUsuario = "Acudiente";
+		var usuarioIngresado = $("#txtUsuarioPopup").val();
+		var clave = $("#txtClavePopup").val();
+		var saldo = "";
+		var idAcudiente = numeroId;
+		
+		
+		var fechaActual = "";
+		var horaActual = "";
+		
+		//Se guardan los datos en un JSON
+		var usuario = {
+            tipoId: tipoId,
+			numeroId: numeroId,
+			primerApellido: primerApellido,
+			segundoApellido: segundoApellido,
+			primerNombre: primerNombre,
+			segundoNombre: segundoNombre,
+			direccion: direccion,
+			telefono1: telefono1,
+			telefono2: telefono2,
+			tipoUsuario: tipoUsuario,
+			usuario: usuarioIngresado,
+			clave: clave,
+			idAcudiente: idAcudiente,
+			saldo: saldo,
+			fecha: fechaActual,
+			hora: horaActual,
+			imgBase64: "",
+			latitud: 0,
+			longitud: 0
+        }		
+		
+		opcionSeleccionar = usuarioIngresado;
+		
+		//Se envian a la funcion que realiza la conexion al werbservice y genera una respuesta que se guarda en un localstorage
+		EnviarDatos(usuario, "ActionInsertarUsuario.php", "CREARUSUARIOACUDIENTE");
+		
+		//$("#selectTipoIdPopup").val();
+		$("#txtNumeroIdPopup").val("");
+		$("#txtPrimerApellidoPopup").val("");
+		$("#txtSegundoApellidoPopup").val("");
+		$("#txtPrimerNombrePopup").val("");
+		$("#txtSegundoNombrePopup").val("");
+		$("#txtDireccionPopup").val("");
+		$("#txtTelefono1Popup").val("");
+		$("#txtTelefono2Popup").val("");
+		$("#txtUsuarioPopup").val("");
+		$("#txtClavePopup").val("");
+		
+		var datos = {
+				
+		}
+		
+		//Se envian a la funcion que realiza la conexion al werbservice y genera una respuesta que se guarda en un localstorage
+		EnviarDatos(datos, "ActionListarAcudientes.php", "LISTARACUDIENTES");
+		
+		//Cerrar el popup con el formulario de crear usuario
+		$('#popup').fadeOut('slow');
+        $('.popup-overlay').fadeOut('slow');
+		
+		$( "#rowAcudiente" ).css( "visibility", "visible" );
+		
+		
+
+    });
+	
+	/*
+		Fecha: 22 de Octubre de 2015
+		Descripcion: Evento para capturar el cambio de valor seleccionado, con el fin de ocultar o mostrar el select de los acudientes
+	*/
+	$("#selectTipoUsuario").change(function(e) {
+		
+		//Se verifica si es estudiante
+		if($("#selectTipoUsuario").val() == "Estudiante"){
+					$( "#rowAcudiente" ).css( "visibility", "visible" );
+			
+			var datos = {
+				
+			}
+		
+			//Se envian a la funcion que realiza la conexion al werbservice y genera una respuesta que se guarda en un localstorage
+			EnviarDatos(datos, "ActionListarAcudientes.php", "LISTARACUDIENTES");
+
+		}else{
+			$( "#rowAcudiente" ).css( "visibility", "hidden" );
+		}
+        
+    });
+	
+	/*
+		Fecha: 23 de Octubre de 2015
+		Descripcion: Evento para capturar la existencia del usuario en la base de datos al quitar el focus del campo de texto de usuario
+	*/
+	$("#txtUsuario").focusout(function(e) {
+        var usuarioExiste = $("#txtUsuario").val();
+
+		//Se guardan los datos en un JSON
+		var datos = {
+            usuario: usuarioExiste			
+        }		
+		
+        //Se envian a la funcion que realiza la conexion al werbservice y genera una respuesta que se guarda en un localstorage
+		EnviarDatos(datos, "ActionExisteUsuario.php", "EXISTEUSUARIO");
+    });
+	
+	$("#txtUsuarioPopup").focusout(function(e) {
+        var usuarioExiste = $("#txtUsuarioPopup").val();
+
+		//Se guardan los datos en un JSON
+		var datos = {
+            usuario: usuarioExiste			
+        }		
+		
+        //Se envian a la funcion que realiza la conexion al werbservice y genera una respuesta que se guarda en un localstorage
+		EnviarDatos({usuario: usuarioExiste}, "ActionExisteUsuario.php", "EXISTEUSUARIO");
+    });
+	
+	
+	
+	/*
+		Descripcion: Tomar una foto con alguna camara que este concetada al equipo
+	*/
+	window.addEventListener('load',init);
+	function init(){
+    	
+
+    	navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUSerMedia || navigator.msGetUserMedia);
+
+		if(navigator.getUserMedia){
+			navigator.getUserMedia({video:true},function(stream){
+			video.src = window.URL.createObjectURL(stream);
+			video.play();
+		},function(e){console.log(e)});
+		
+		video.addEventListener('loadedmetadata',function(){canvas.width = video.videoWidth, canvas.height = video.videoHeight;},false);
+		
+		btn.addEventListener('click',function(){
+			canvas.getContext('2d').drawImage(video,0,0);
+			var imgData = canvas.toDataURL('image/png');
+			img.setAttribute('src',imgData);		
+		});
+		
+		}else{
+			alert("Actualiza tu navegador");		
+		}
+  }
+	
+</script>
+ <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script> 
+</body>
+</html>

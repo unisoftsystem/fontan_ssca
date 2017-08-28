@@ -1,0 +1,594 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Nuevo Menu del Dia</title>
+<link href="css/style.css" rel="stylesheet"/>
+<link href="css/menu.css" rel="stylesheet"/>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link href="css/popup.css" rel="stylesheet"/>
+<link href='http://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="js/style.js"></script>	
+<script type="text/javascript" src="js/ConexionWebService.js"></script>
+<!--<script type="text/javascript" src="js/ValidacionUsuario.js"></script>-->
+<script type="text/javascript" src="js/alertify.js"></script>
+<link rel="stylesheet" href="css/alertify.core.css" />
+<link rel="stylesheet" href="css/alertify.default.css" />
+<link rel="stylesheet" media="screen" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.min.css">
+<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+<script src="js/script.js"></script>
+<script src="js/ValidacionNumerica.js" type="text/javascript"></script>
+<script type="text/javascript" src="js/popup.js"></script>
+<link href="css/calendar.min.css" rel="stylesheet">
+<style>
+	label, select{
+		color:#00C;
+	}
+	textarea, select{
+		width:100%;
+	}
+	textarea{
+		height:150px;
+	}
+</style>
+</head>
+
+<body id="bodyBase">
+	<h4 style="color:#CCC;margin-left:10px; margin-top:5px">Bienvenido(a): <label id="usuarioSesion"></label></h4>
+    <label style="float:right;margin-right:7%; margin-top:-20px; visibility:hidden"><font color="#FFFFFF" size="4"><a href="ModificarProducto.html" style="color:#FFF">Modificaci&oacute;n de Productos</a></font></label><label style="float:right; margin-right:20px; margin-top:-20px; color:#FFF; visibility:hidden">|</label><label style="float:right; margin-right:40px; margin-top:-20px; visibility:hidden"><font color="#FFFFFF" size="4"><a href="#" style="color:#FFF">Creaci&oacute;n de Productos</a></font></label>
+        <h2 align="right" style="margin-top:2%; margin-right:2%; color:#00C">Creaci&oacute;n de Men&uacute;s del d&iacute;a</h2>
+        <div id='cssmenu'>
+            <ul>
+               <li class="" id="AdminUsuarios" style="display:none"><a href='#' title="Admin.Usuarios"><span>Admin.Usuarios</span></a>
+                    <ul style="margin-right:-42%">
+                         <li><a href='#' title="Usuarios Plataforma"><span>Usuarios Plataforma</span></a></li>
+                         <li class='last' title="Usuarios Aplicaciones"><a href='AdminUsuariosAplicaciones.html'><span>Usuarios Aplicaciones</span></a></li>
+					</ul>
+               </li>
+               <li class='' style="display:none" id="AdminCredenciales"><a href='#' title="Admin.Credenciales"><span>Admin.Credenciales</span></a>
+                  <ul style="margin-right:-42%">
+                     <li id="ReemplazoCredencial" style="display:none"><a href='ReemplazarCredencial.html' title="Reemplazo de credenciales"><span>Reemplazo de credenciales</span></a></li>
+                     <li class='last'><a href='AdminCredencial.html' title="Cambio de Estado"><span>Cambio de Estado</span></a></li>
+                     <li class='last'><a href='ConsultaMovimientosAcudiente.html' title="Consulta de Movimientos"><span>Consulta de Movimientos</span></a></li>
+                     <li class='last'><a href='ConsultaSaldo.html' title="Consulta de Saldos"><span>Consulta de Saldos</span></a></li>
+                     <li class='last'><a href='RecargueMonetarioAcudiente.html' title="Recarga en Linea"><span>Recarga en Linea</span></a></li>
+                     <li class='last'><a href='TrasladoCredencialAcudiente.html' title="Traslado de Fondos entre Credenciales"><span>Traslado de Fondos entre Credenciales</span></a></li>
+                  </ul>
+               </li>
+               <li class='' id="Liquidacion" style="display:none"><a href='#' title="Liquidaci&oacute;n y Pagos"><span>Liquidaci&oacute;n y Pagos</span></a>
+                  <ul style="margin-right:-42%">
+                    
+                  </ul>
+               </li>
+               <li class='' id="PuntosRecargue" style="display:none"><a href='#' title="Puntos de Recarga"><span>Puntos de Recarga</span></a>
+                  <ul style="margin-right:-42%">
+                     
+                  </ul>
+               </li>
+               <li class='' id="CentroOperacion" style="display:none"><a href='#' title="Centro - Operaciones Rutas"><span>Centro - Operaciones Rutas</span></a>
+                    <ul style="margin-right:-42%">
+                         <li><a href='' title="Vehiculos"><span>Vehiculos</span></a></li>
+                         <li><a href='CrearConductores.html' title="Conductores"><span>Conductores</span></a></li>
+                         <li><a href='#' title="Monitores"><span>Monitores</span></a></li>
+                         <li><a href='crearruta.php' title="v"><span>Rutas</span></a></li>
+                         <li><a href='#' title="Centro de Pagos"><span>Centro de Pagos</span></a></li>
+                         <li class='last' title="Tracking"><a href='menutracking.php'><span>Tracking</span></a></li>
+                    </ul>
+               </li>
+               <li class="" id="RutaEscolar" style="display:none"><a href='#' title="Ruta Escolar"><span>Ruta Escolar</span></a>
+                    <ul style="margin-right:-42%">
+                        
+					</ul>
+               </li>
+               <li class="" id="RestriccionConsumo" style="display:none"><a href='#' title="Restricci&oacute;n de Consumo"><span>Restricci&oacute;n de Consumo</span></a>
+                    <ul style="margin-right:-42%">
+                        
+					</ul>
+               </li>
+               <li class="" id="RecargueCredencial" style="display:none"><a href='ProcesoRecaudo.html' title="Recargue de Credenciales"><span>Recargue de Credenciales</span></a>
+                    <ul style="margin-right:-42%">
+                        
+					</ul>
+               </li>
+               <li class="" id="Reportes" style="display:none"><a href='ReporteRecaudo.html' title="Reportes"><span>Reportes</span></a>
+                    <ul style="margin-right:-42%">
+                        
+					</ul>
+               </li>
+               <li class="" id="Salir"><a href='#' title="Cerrar Sesi&oacute;n"><span>Cerrar Sesi&oacute;n</span></a>
+                    <ul style="margin-right:-42%">
+                        
+					</ul>
+               </li>
+            </ul>
+        </div>
+        <div class="contenidoBorde" align="center">
+        	<div class="calendar" data-color="normal" offset="0">
+            	<!--<div class="calendar-month-view">
+
+                    <p>Men&uacute;s del dia</p>
+
+               	</div>-->
+                <div class="letrasDay">
+                	<div>Lunes</div>
+                    <div>Martes</div>
+                    <div>Miercoles</div>
+                    <div>Jueves</div>
+                    <div>Viernes</div>
+                    <div>Sabado</div>
+                    <div>Domingo</div>
+               	</div>
+                <div class="calendar-holder">
+                	<div class="calendar-grid">
+                    	<!--<div class="calendar-day other-month" strtime="20151228" time="1451341414797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">28</div>
+                       	</div>
+                        <div class="calendar-day other-month" strtime="20151229" time="1451427814797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">29</div>
+                       	</div>
+                        <div class="calendar-day other-month" strtime="20151230" time="1451514214797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">30</div>
+                       	</div>
+                        <div class="calendar-day other-month" strtime="20151231" time="1451600614797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">31</div>
+                        </div>-->
+                        <div class="calendar-day" strtime="201611" time="1451687014797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder" align="left" id="dia1"></div>
+                       	</div>
+                        <div class="calendar-day" strtime="201612" time="1451773414797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder" align="left" id="dia2"></div>
+                       	</div>
+                        <div class="calendar-day" strtime="201613" time="1451859814797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder" align="left" id="dia3"></div>
+                       	</div>
+                        <div class="calendar-day" strtime="201614" time="1451946214797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder" align="left" id="dia4"></div>
+                        </div>
+                        <div class="calendar-day" strtime="201615" time="1452032614797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder" align="left" id="dia5"></div>
+                        </div>
+                        <div class="calendar-day" strtime="201616" time="1452119014797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder" align="left" id="dia6"></div>
+                     	</div>
+                        <div class="calendar-day" strtime="201617" time="1452205414797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder" align="left" id="di7"></div>
+                       	</div>
+                        <!--<div class="calendar-day" strtime="201618" time="1452291814797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">8</div>
+                       	</div>
+                        <div class="calendar-day" strtime="201619" time="1452378214797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">9</div>
+                       	</div>
+                        <div class="calendar-day" strtime="2016110" time="1452464614797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">10</div>
+                       	</div>
+                        <div class="calendar-day" strtime="2016111" time="1452551014797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">11</div>
+                       	</div>
+                        <div class="calendar-day" strtime="2016112" time="1452637414797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">12</div>
+                      	</div>
+                        <div class="calendar-day" strtime="2016113" time="1452723814797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">13</div>
+                       	</div>
+                        <div class="calendar-day" strtime="2016114" time="1452810214797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">14</div>
+                       	</div>
+                        <div class="calendar-day" strtime="2016115" time="1452896614797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">15</div>
+                        </div>
+                        <div class="calendar-day" strtime="2016116" time="1452983014797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">16</div>
+                       	</div>
+                        <div class="calendar-day" strtime="2016117" time="1453069414797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">17</div>
+                       	</div>
+                        <div class="calendar-day" strtime="2016118" time="1453155814797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">18</div>
+                       	</div>
+                        <div class="calendar-day this-day" strtime="2016119" time="1453242214797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">19</div>
+                       	</div>
+                        <div class="calendar-day have-events" strtime="2016120" time="1453328614797">
+                        	<div class="event-notif-holder">
+                            	<div class="event-notif"></div>
+                           	</div>
+                            <div class="date-holder">20</div>
+                      	</div>
+                        <div class="calendar-day" strtime="2016121" time="1453415014797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">21</div>
+                       	</div>
+                        <div class="calendar-day" strtime="2016122" time="1453501414797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">22</div>
+                       	</div>
+                        <div class="calendar-day" strtime="2016123" time="1453587814797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">23</div>
+                       	</div>
+                        <div class="calendar-day" strtime="2016124" time="1453674214797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">24</div>
+                       	</div>
+                        <div class="calendar-day" strtime="2016125" time="1453760614797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">25</div>
+                      	</div>
+                        <div class="calendar-day" strtime="2016126" time="1453847014797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">26</div>
+                       	</div>
+                        <div class="calendar-day" strtime="2016127" time="1453933414797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">27</div>
+                       	</div>
+                        <div class="calendar-day" strtime="2016128" time="1454019814797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">28</div>
+                       	</div>
+                        <div class="calendar-day" strtime="2016129" time="1454106214797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">29</div>
+                       	</div>
+                        <div class="calendar-day" strtime="2016130" time="1454192614797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">30</div>
+                      	</div>
+                        <div class="calendar-day" strtime="2016131" time="1454279014797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">31</div>
+                      	</div>
+                        <div class="calendar-day other-month" strtime="201621" time="1454365414797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">1</div>
+                       	</div>
+                        <div class="calendar-day other-month" strtime="201622" time="1454451814797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">2</div>
+                       	</div>
+                        <div class="calendar-day other-month" strtime="201623" time="1454538214797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">3</div>
+                       	</div>
+                        <div class="calendar-day other-month" strtime="201624" time="1454624614797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">4</div>
+                       	</div>
+                        <div class="calendar-day other-month" strtime="201625" time="1454711014797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">5</div>
+                       	</div>
+                        <div class="calendar-day other-month" strtime="201626" time="1454797414797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">6</div>
+                       	</div>
+                        <div class="calendar-day other-month" strtime="201627" time="1454883814797">
+                        	<div class="event-notif-holder"></div>
+                            <div class="date-holder">7</div>
+                       	</div>-->
+                  	</div>
+                    
+                    <!--<div class="calendar-specific">
+                    	<div class="specific-day">
+                        	<div class="specific-day-info" i="day"></div>
+                            <div class="specific-day-info" i="month"></div>
+                       	</div>
+                        <div class="specific-day-scheme"></div>
+                   	</div>-->
+            	</div>
+           	</div>
+            <br>
+        	<form id="commentForm" method="post" action="#">
+                <table align="center">
+                    <tr>
+                        <td><label for="txtNombre">Nombre del Men&uacute;:</label></td>
+                        <td width="5px">&nbsp;</td>
+                        <td><input type="text" name="txtNombre" id="txtNombre" required/></td>   
+                        <td width="5px">&nbsp;</td>
+                        <td rowspan="12" valign="top">
+                            <img src="" id="imageFoto" name="imageFoto" width="128px" height="128px"/><br>
+                            
+                                <label for="fileFoto"><b>Foto: </b></label><br><input type="file" id="fileFoto" name="fileFoto" accept="image/*" required/>
+                                         
+                            </td>
+                        </td>   
+                    </tr>
+                    <tr>
+                        <td valign="top"><label for="selectProteina">Prote&iacute;na:</label></td>
+                        <td width="5px">&nbsp;</td>
+                        <td><select id="selectProteina" name="selectProteina"></select><br><a href="#open" id="open">Crear Prote&iacute;na</a></td>        
+                    </tr>
+                    <tr>
+                        <td valign="top"><label for="txtDescripcion">Descripcion del men&uacute;:</label></td>
+                        <td width="5px">&nbsp;</td>
+                        <td><textarea type="text" name="txtDescripcion" id="txtDescripcion" required></textarea></td>        
+                    </tr>
+                    <tr>
+                        <td><label for="txtValor">Dia de la semana:</label></td>
+                        <td width="5px">&nbsp;</td>
+                        <td><select id="selectDiaSemana" name="selectDiaSemana">
+                            <option value="1">Lunes</option>
+                            <option value="2">Martes</option>
+                            <option value="3">Miercoles</option>
+                            <option value="4">Jueves</option>
+                            <option value="5">Viernes</option>
+                            <option value="6">Sabado</option>
+                            <option value="7">Domingo</option>
+                        </select></td>        
+                    </tr>
+                    <tr>
+                    <td><label for="txtRest">Restricci&oacute;n por edad:</label></td>
+                        <td width="5px">&nbsp;</td>
+                        <td><input type="text" name="txtRest" id="txtRest" required/></td>  
+                    </tr>
+                    <!--<tr>
+                        <td><label for="txtEstado">ESTADO:</label></td>
+                        <td width="5px">&nbsp;</td>
+                        <td><input type="radio" name="radioEstado" id="radioEstadoActivo" value="ACTIVO"/><label for="radioEstadoActivo" style="margin-left:10px">ACTIVO</label><br><input type="radio" name="radioEstado" id="radioEstadoInactivo" value="INACTIVO"/><label for="radioEstadoInactivo" style="margin-left:10px">INACTIVO</label></td>        
+                    </tr>-->
+                    <tr>
+                        <td colspan="5" height="10px">&nbsp;</td>                   
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td width="5px">&nbsp;</td>
+                        <td align="right"><button type="submit" name="btnCrearMenu" id="btnCrearMenu" class="btn btn-primary"><b>CREAR</b></button></td>
+                    </tr>
+                </table>
+			</form>
+            
+            <div id="popup" style="display: none; margin-top:-100px">
+                <div class="content-popup">
+                    <div class="close"><a href="#" id="close"><img src="images/close.png"/></a></div>
+                    <form id="commentFormProteina" method="post" action="#">
+                       <h2>Nueva Prote&iacute;na</h2>
+                       <br>
+                       <table border="0" style="float:left" width="80%">
+                       	<tr>
+                            <tr>
+                                <td align="right"><label for="txtNombreProteina">Nombre:</label></td>
+                                <td width="10px">&nbsp;</td>
+                                <td><input type="text" name="txtNombreProteina" id="txtNombreProteina" style="width:100%" required/></td>
+                            </tr>
+                            <tr>
+                            	<td height="5px">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">&nbsp;</td>
+                                <td align="right"><button type="submit" name="btnCrearProteina" id="btnCrearProteina" style="width:120px; border-radius:6px; height:30px;background-color:#069;color:#FFF;" class="btn btn-primary"><b>CREAR</b></button></td>
+                            </tr>
+                        </table>
+                	</form>
+                    
+                </div>
+            </div>
+            
+		</div>
+    <script src="js/jquery.validate.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.min.js"></script>
+    <script>
+		//Valor guardado cuando se cierra un popup y se concreto una operación
+		var opcionSeleccionar = "";
+        $.validator.setDefaults({
+            submitHandler: function() {
+                //Envio de datos si todo esta bien
+               	//Se obtienen los datos a ingresar
+		
+				var nombre = $("#txtNombre").val();
+        var rest = $("#txtRest").val();
+				var proteina = $("#selectProteina").val();
+				var descripcion = $("#txtDescripcion").val();
+				var dia = $("#selectDiaSemana").val();
+				var file = $('#fileFoto')[0].files[0]
+				var foto = $("#imageFoto").attr("src");
+				console.log(foto);
+				
+				//Se guardan los datos en un JSON
+				var usuario = {
+					nombre: nombre,
+          rest: rest,
+					proteina: proteina,
+					descripcion: descripcion,
+					dia: dia,
+					imgBase64: foto
+				}		
+				
+				//Se envian a la funcion que realiza la conexion al werbservice y 
+				//genera una respuesta que se guarda en un localstorage
+				EnviarDatos(usuario, "ActionInsertarMenuDia.php", "CREARMENUDIA");
+				
+				//$("#selectTipoId").val();
+				$("#txtNombre").val("");
+				$("#txtDescripcion").val("");    
+            },
+            showErrors: function(map, list) {
+                // there's probably a way to simplify this
+                var focussed = document.activeElement;
+                if (focussed && $(focussed).is("input, textarea")) {
+                    $(this.currentForm).tooltip("close", {
+                        currentTarget: focussed
+                    }, true)
+                }
+                this.currentElements.removeAttr("title").removeClass("ui-state-highlight");
+                $.each(list, function(index, error) {
+                    $(error.element).attr("title", error.message).addClass("ui-state-highlight");
+                });
+                if (focussed && $(focussed).is("input, textarea")) {
+                    $(this.currentForm).tooltip("open", {
+                        target: focussed
+                    });
+                }
+            }
+        });
+        
+        (function() {
+            // use custom tooltip; disable animations for now to work around lack of refresh method on tooltip
+            $("#commentForm").tooltip({
+                show: false,
+                hide: false
+            });
+        
+            // validate the comment form when it is submitted
+            $("#commentForm").validate({
+                rules: {
+                    txtNombre: "required",
+                    txtRest: "required",
+                    fileFoto: "required",
+					txtDescripcion: "required"
+                },
+                messages: {
+                    txtNombre: "Por favor ingrese un nombre para el menu del dia",
+                    txtRest: "Por favor ingrese la edad de restriccion",
+                    fileFoto: "Por favor seleccione una foto",
+					txtDescripcion: "Por favor ingrese una descripcion de los acompañantes de la proteina"
+                }
+            });
+        })();
+		
+		/*******************************************************************************************/
+		
+		$.validator.setDefaults({
+			submitHandler: function() {
+				//Envio de datos si todo esta bien
+				var nombreProteina = $("#txtNombreProteina").val();
+				
+				//Se guardan los datos en un JSON
+				var usuario = {
+					nombre: nombreProteina
+				}		
+				EnviarDatos(usuario, "ActionInsertarProteina.php", "CREARPROTEINAPOPUP");
+				
+			},
+			showErrors: function(map, list) {
+				// there's probably a way to simplify this
+				var focussed = document.activeElement;
+				if (focussed && $(focussed).is("input, textarea")) {
+					$(this.currentForm).tooltip("close", {
+						currentTarget: focussed
+					}, true)
+				}
+				this.currentElements.removeAttr("title").removeClass("ui-state-highlight");
+				$.each(list, function(index, error) {
+					$(error.element).attr("title", error.message).addClass("ui-state-highlight");
+				});
+				if (focussed && $(focussed).is("input, textarea")) {
+					$(this.currentForm).tooltip("open", {
+						target: focussed
+					});
+				}
+			}
+		});
+		
+		(function() {
+			// use custom tooltip; disable animations for now to work around lack of refresh method on tooltip
+			$("#commentFormProteina").tooltip({
+				show: false,
+				hide: false
+			});
+		
+			// validate the comment form when it is submitted
+			$("#commentFormProteina").validate({
+				rules: {
+					txtNombreProteina: "required"
+				},
+				messages: {
+					txtNombreProteina: "Por favor ingrese un nombre para la proteina"
+				}
+			});
+		})();
+
+		/*******************************************************************************************/
+		
+	//Capturar evento del boton crear
+	/*$("#btnCrearMenu").click(function(e) {
+		
+    });*/
+	
+	$("#fileFoto").change(function(e) {
+        //alert($("#fileFoto").val());
+		archivo(e);
+    });
+	function archivo(evt) {
+		  var files = evt.target.files; // FileList object
+	 
+		  // Obtenemos la imagen del campo "file".
+		  for (var i = 0, f; f = files[i]; i++) {
+			//Solo admitimos imágenes.
+			if (!f.type.match('image.*')) {
+				continue;
+			}
+	 
+			var reader = new FileReader();
+	 
+			reader.onload = (function(theFile) {
+				return function(e) {
+				  // Insertamos la imagen
+				 document.getElementById("imageFoto").src = e.target.result;
+				 
+				 //console.log(e.target.result)
+				 
+				};
+			})(f);
+	 
+			reader.readAsDataURL(f);
+		  }
+	  }
+	
+	$("#Salir").click(function(e) {
+		localStorage.removeItem("usuario");
+		localStorage.removeItem("tipoUsuario");
+		window.location.href = "index.html";
+	});
+	window.addEventListener('load',init);
+	function init(){
+    	//Se envian a la funcion que realiza la conexion al werbservice y genera una respuesta que se guarda en un localstorage
+		var usuarioSesion = localStorage.getItem("usuario"); 
+		console.log(usuarioSesion);
+		$("#usuarioSesion").html(usuarioSesion);
+		var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+		var diasSemana = new Array("Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado");
+		var f = new Date();
+		console.log(diasSemana[f.getDay()] + ", " + f.getDate() + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
+		EnviarDatos({}, "ActionListarProteinas.php", "LISTARPROTEINAS");	
+		
+		$.post("ActionListarMenuDia.php", {})
+		.done(function( data ) {
+			var json = JSON.parse(data);
+			console.log(data);
+			for(i = 0; i < json.length; i++){
+				$("#dia" + (i + 1)).html("<img src='" + json[i].Foto + "' width='100%'/>" + json[i].Nombre + "<br><br>" + json[i].Proteina + "<br>" + json[i].Descripcion);
+				console.log(json[i]);
+			}
+		});			
+
+  	}
+	
+	
+</script>
+</body>
+</html>

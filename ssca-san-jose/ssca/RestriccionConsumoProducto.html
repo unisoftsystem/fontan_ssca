@@ -1,0 +1,360 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>RESTRICCIONES DE CONSUMO</title>
+<link rel="stylesheet" href="css/styles.css"/>
+<link rel="stylesheet" href="css/styles.css"/>
+<link href="css/style.css" rel="stylesheet"/>
+<link href="css/menu.css" rel="stylesheet"/>
+<link href="css/popup.css" rel="stylesheet"/>
+<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="js/style.js"></script>	
+<script type="text/javascript" src="js/ConexionWebService.js"></script>
+<script type="text/javascript" src="js/ValidacionUsuario.js"></script>
+<script src="js/ValidacionNumerica.js" type="text/javascript"></script>
+<link rel="stylesheet" media="screen" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.min.css">
+<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="js/alertify.js"></script>
+<link rel="stylesheet" href="css/alertify.core.css" />
+<link rel="stylesheet" href="css/alertify.default.css" />
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<script src="js/script.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/photobooth.js"></script>
+<script type="text/javascript" src="js/qr/grid.js"></script>
+<script type="text/javascript" src="js/qr/version.js"></script>
+<script type="text/javascript" src="js/qr/detector.js"></script>
+<script type="text/javascript" src="js/qr/formatinf.js"></script>
+<script type="text/javascript" src="js/qr/errorlevel.js"></script>
+<script type="text/javascript" src="js/qr/bitmat.js"></script>
+<script type="text/javascript" src="js/qr/datablock.js"></script>
+<script type="text/javascript" src="js/qr/bmparser.js"></script>
+<script type="text/javascript" src="js/qr/datamask.js"></script>
+<script type="text/javascript" src="js/qr/rsdecoder.js"></script>
+<script type="text/javascript" src="js/qr/gf256poly.js"></script>
+<script type="text/javascript" src="js/qr/gf256.js"></script>
+<script type="text/javascript" src="js/qr/decoder.js"></script>
+<script type="text/javascript" src="js/qr/qrcode.js"></script>
+<script type="text/javascript" src="js/qr/findpat.js"></script>
+<script type="text/javascript" src="js/qr/alignpat.js"></script>
+<script type="text/javascript" src="js/qr/databr.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+
+		// for webcam support
+		$('#example').photobooth().on("image", function(event, dataUrl) {
+			qrCodeDecoder(dataUrl);
+		});
+	
+		$('#button').click(function() {
+			$('.trigger').trigger('click');
+		});
+		
+		qrcode.callback = showInfo;
+	});
+	
+	// decode the img
+	function qrCodeDecoder(dataUrl) {
+		qrcode.decode(dataUrl);
+	}
+	
+	// show info from qr code
+	function showInfo(data) {
+		$("#txtUsuario").val(data);
+		EnviarDatos({usuario: data}, "ActionConsultarUsuarioPorId.php", "CONSULTARUSUARIOREEMPLAZOC");
+		console.log(data);
+	}
+   
+</script>
+<style>
+          input, select{
+        border-radius:8px;
+        
+        }
+  h3 {
+        text-shadow: 0px 2px 3px #555;
+        }
+</style>
+</head>
+
+<body id="bodyBase">
+<h5 style="color:#CCC;margin-left:10px; margin-top:5px">Modulo Creacion de Restriccion de Consumo de Producto</h5>
+
+<label style="color:#FFF;margin-left:10px; margin-top:5px; margin-right: 10px; float:right">Bienvenido(a): <label id="usuarioSesion" style="color:#FFF"></label></label>
+
+<label style="float:right;margin-right:7%; margin-top:-20px"><font color="#FFFFFF" size="3"><a href="ModificarRestriccionConsumoProducto.html" style="color:#FFF">Modificaci&oacute;n de Restricci&oacute;n</a></font></label><label style="float:right; margin-right:20px; margin-top:-20px; color:#FFF">|</label><label style="float:right; margin-right:40px; margin-top:-20px"><font color="#09C" size="3"><a href="#" style="color:#09C">Creaci&oacute;n de Restricci&oacute;n</a></font></label>
+
+<br>
+<h3 align="right" style="margin-top:2%; margin-right:2%; color:#09C">Restriccion de Consumo por Productos</h3>
+	<div id='cssmenu'>
+            <ul>
+               <li class='' style="display:none" id="AdminCredenciales" class="desactive"><a href='#' title="Admin.Credenciales">ADMINISTRACIÓN DE CREDENCIALES</a>
+                  <ul style="margin-right:-42%">
+                     <li id="ReemplazoCredencial" style="display:none"><a href='ReemplazarCredencial.html' title="Reemplazo de credenciales">Reemplazo de credenciales</a></li>
+                     <li class='last'><a href='AdminCredencial.html' title="Cambio de Estado">CAMBIO DE ESTADO</a></li>
+                     <li class='last'><a href='ConsultaMovimientosAcudiente.html' title="Consulta de Movimientos">CONSULTA DE MOVIMIENTOS</a></li>
+                     <li class='last'><a href='ConsultaSaldo.html' title="Consulta de Saldos">CONSULTA DE SALDOS</a></li>
+                     <li class='last'><a href='ServicioProximoRecargaLinea.php' title="Recarga en Linea">RECARGA EN LINEA</a></li>
+                     <li class='last'><a href='TrasladoCredencialAcudiente.html' title="Traslado de Fondos entre Credenciales">TRASLADO DE FONDOS ENTRE CREDENCIALES</a></li>
+                  </ul>
+               </li>
+               
+               <li class="" id="RutaEscolar" style="display:none" class="desactive"><a href='#' title="Ruta Escolar">RUTA ESCOLAR</a>
+                    <ul style="margin-right:-42%">
+                        <li><a href='EnvioMensajesMonitor.html' title="Envío de Mensajes">ENVÍO DE MENSAJES</a></li>
+                        <li class='last' title="Tracking"><a href="javascript:void(0);" onclick="enviar_variables();">TRACKING</a></li>
+                        <li><a href='#' title="Información de la Ruta">INFORMACIÓN DE LA RUTA</a></li>
+                    </ul>
+               </li>
+               <li class="" id="RestriccionConsumo" style="display:none" class="desactive"><a href='#' title="Restricci&oacute;n de Consumo">RESTRICCI&Oacute;N DE CONSUMO</a>
+                    <ul style="margin-right:-42%">
+                      <li><a href='RestriccionConsumoValor.html' title="Restricciones por Valor">RESTRICCIONES POR VALOR</a></li>
+                      <li><a href='RestriccionConsumoProducto.html' title="Restricciones por Producto">RESTRICCIONES POR PRODUCTO</a></li>
+                  </ul>
+               </li>
+                <li class="" id="RestauranteAcudientes" style="display:none" class="desactive">
+                  <a href='#' title="Restaurante">RESTAURANTE</a>
+                  <ul style="margin-right:-42%">
+                    <li>
+                      <a href='MenuSemanal.html' title="Menú Semanal"> 
+                        MENÚ SEMANAL
+                      </a>
+                    </li>
+                  </ul>
+                </li>              
+               
+                <li class="" id="Modificacion Datos Perfil" style="display:none" class="desactive"><a href='ModificarAcudiente.html' title="Modificacion Datos Perfil">Modificacion Datos Perfil</a>
+                    <ul style="margin-right:-42%">    
+                    </ul>
+                 </li>
+               <li class="" id="Salir"><a href='#' title="Cerrar Sesi&oacute;n">CERRAR SESI&Oacute;N</a>
+                    <ul style="margin-right:-42%">
+                        
+                    </ul>
+               </li>
+            </ul>
+
+          
+
+        </div>
+<div class="contenidoBorde" align="center">
+    <table style="margin-top:1%;position:absolute" cellspacing="0" cellpadding="0" width="100%">
+	<tr>
+    	<td width="20px">&nbsp;</td>           
+    	<td><label for="selectIdCredencial"><font color="#09C" size="2">Seleccione Estudiante:</font></label></td>
+        <td><select id="selectIdCredencial" name="selectIdCredencial" class="form-control"></select></td>           
+        <td width="20px">&nbsp;</td>           
+    </tr>
+    <tr>
+    	<td colspan="4" height="5px">&nbsp;</td>        
+    </tr>
+    <tr>
+    	<td>&nbsp;</td>           
+    	<td><label for="selectCategoria"><font color="#09C" size="2">Categoria:</font></label></td>
+        <td><select id="selectCategoria" name="selectCategoria" class="form-control"></select></td>        
+    </tr>
+    <tr>
+    	<td colspan="4" height="5px">&nbsp;</td>        
+    </tr>
+    <tr>
+    	<td>&nbsp;</td>           
+    	<td><label for="selectSubcategoria"><font color="#09C" size="2">SubCategoria:</font></label></td>
+        <td><select id="selectSubcategoria" name="selectSubcategoria" class="form-control"></select></td>        
+        <td>&nbsp;</td>           
+    </tr>
+	<tr>
+    	<td colspan="4" height="5px">&nbsp;</td>        
+    </tr>
+	<tr>
+    	<td>&nbsp;</td>           
+    	<td><label for="selectProducto"><font color="#09C" size="2">Producto:</font></label></td>
+        <td><select id="selectProducto" name="selectProducto" class="form-control"></select></td>        
+        <td>&nbsp;</td>           
+    </tr>
+    <tr>
+    	<td colspan="4" height="5px">&nbsp;</td>        
+    </tr>
+    
+    <tr>
+    	<td colspan="2">&nbsp;</td>
+        <td align="right"><button type="button" id="btnRestriccion" name="btnRestriccion" class="btn btn-primary">Guardar Restriccion</button></td>        
+    </tr>
+   
+    
+    
+</table>
+
+</div>
+	
+<script type="text/javascript">
+	/*
+		Fecha: 			Octubre 22 de 2015
+		Descripcion: 	Script para enviar los datos al webservice para que los inserte en la base de datos
+	
+	*/
+	
+	//Valor guardado cuando se cierra un popup y se concreto una operación
+	var opcionSeleccionar = "";
+		
+	//Capturar evento del boton crear
+	$("#btnRestriccion").click(function(e) {
+		//Se obtienen los datos a enviar		
+		var idEstudiante = $("#selectIdCredencial").val();
+		var valor = $("#selectProducto").val();
+		var usuarioSesion = localStorage.getItem("usuario"); 
+		/*
+			Descripcion: Obtener fecha y hora para registrar movimientos
+		*/
+		var date = new Date();
+		var dia = date.getDate();
+		var mes = (date.getMonth() + 1);
+		var year = date.getFullYear();
+		
+		
+		if(dia < 10) {
+			dia = '0' + dia;
+		} 
+		
+		if(mes < 10) {
+			mes = '0' + mes;
+		} 
+		
+		var fechaActual = year + "-" + mes + "-" + dia;
+		var horaActual = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds(); 
+		
+		//Se guardan los datos en un JSON
+		var usuario = {
+            Tipo: "PORPRODUCTO",
+			idEstudiante: idEstudiante,
+			idAcudiente: usuarioSesion,
+			Log: valor,
+			Fecha: fechaActual,
+			Hora: horaActual
+        }		
+		
+		$.post("ActionInsertarRestriccion.php", usuario)
+		.done(function( data ) {
+			console.log($.trim(data));
+			if($.trim(data) == "1"){
+				alert("Restriccion registrada con exito");
+				window.location.href = "RestriccionConsumoProducto.html";
+				$("#txtPrimerApellido").val("");
+				$("#txtSegundoApellido").val("");
+				$("#txtPrimerNombre").val("");
+				$("#txtSegundoNombre").val("");
+				$("#txtValor").val("");
+				$("#txtRecarga").val("");
+				$("#imageFoto").attr("src", "");				
+			}
+		});
+		//Se envian a la funcion que realiza la conexion al werbservice y genera una respuesta que se guarda en un localstorage
+		//EnviarDatos(usuario, "ActionTrasladoFondos.php", "PROCESARRECAUDO");
+		
+
+
+		
+    });
+	$("#selectCategoria").change(function(e) {
+		var categoria = $("#selectCategoria").val();
+		
+		if($("#selectCategoria").val() != "Seleccione"){
+			EnviarDatos({idCategoria: categoria}, "ActionListarSubCategorias.php", "LISTARSUBCATEGORIAS");
+			$("#selectProducto").empty();
+			$("#btnRestriccion").css({"display":"none"});
+		}else{
+			$("#selectSubcategoria").empty();
+			$("#selectProducto").empty();
+			$("#btnRestriccion").css({"display":"none"});
+		}
+    });
+	
+	$("#selectSubcategoria").change(function(e) {
+		if($("#selectSubcategoria").val() != "Seleccione"){
+			var subcategoria = $("#selectSubcategoria").val();
+			var f = new Date();
+			var diasSemana = new Array("Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado");
+			var dia = f.getDay();
+			var usuarioSesion = localStorage.getItem("usuario"); 
+			$.post("http://190.60.211.17/Fontan/index.php/producto/ListarProductosSubCategoria", {subcategoria: subcategoria, dia: dia, idUsuario: usuarioSesion, idCredencial: ""})
+			.done(function( data ) {
+				console.log($.trim(data));
+				if($.trim(data) != "[]"){
+					var json = JSON.parse(data);
+					$("#selectProducto").empty();
+					$("#btnRestriccion").css({"display":"block"});
+					$.each(json, function(i, item) {
+						$("#selectProducto").append('<option value="' + json[i].codigoProducto + '">' + json[i].NombreProducto + '</option>'); 
+						
+					});
+				}
+			});
+		}else{
+			$("#selectProducto").empty();
+			$("#btnRestriccion").css({"display":"none"});
+		}
+    });
+	/*
+		Fecha: 23 de Octubre de 2015
+		Descripcion: Evento para capturar la existencia del usuario en la base de datos al quitar el focus del campo de texto de usuario
+	*/
+	
+	$("#selectIdCredencial").change (function(e) {
+      
+		if($("#selectIdCredencial").val() != "Seleccione"){
+			EnviarDatos({}, "ActionListarCategorias.php", "LISTARCATEGORIASMODIF");	
+		}else{
+			$("#selectIdCredencial").empty();
+			$("#selectCategoria").empty();
+			$("#selectSubcategoria").empty();
+			$("#selectProducto").empty();
+		}
+	});
+	
+	window.addEventListener('load',init);
+	function init(){
+		var usuarioSesion = localStorage.getItem("primernombreusuario") + " " + localStorage.getItem("segundonombreusuario") + " " + localStorage.getItem("primerapellidousuario") + " " + localStorage.getItem("segundoapellidousuario"); 
+		$("#btnRestriccion").css({"display":"none"});
+		console.log(usuarioSesion);
+		$("#usuarioSesion").html(usuarioSesion);
+		var usuarioSesion = localStorage.getItem("usuario");
+		$.post("ActionListarCredencialesAcudiente.php", {acudiente: usuarioSesion})
+		.done(function( data ) {
+			console.log($.trim(data));
+			if($.trim(data) != "[]"){
+				var json = JSON.parse(data);
+				$("#selectIdCredencial").empty();
+				$("#selectIdCredencial").append('<option value="Seleccione">Seleccione...</option>'); 
+				
+				$.each(json, function(i, item) {
+					$("#selectIdCredencial").append('<option value="' + json[i].usuario + '">' + json[i].primerNombre + ' ' + json[i].segundoNombre + ' ' + json[i].primerApellido + ' ' + json[i].segundoApellido + '</option>'); 
+					
+				});
+			}
+		});
+		
+		//Se envian a la funcion que realiza la conexion al werbservice y genera una respuesta que se guarda en un localstorage
+		//EnviarDatos({acudiente: usuarioSesion}, "ActionListarCredencialesAcudiente.php", "LISTACREDENCIALESACUDIENTESTRASLADO");
+		
+		
+	}
+	$("#Salir").click(function(e) {
+    var confirmar = window.confirm("¿Desea cerrar sesión?");
+    if(confirmar){
+  		localStorage.removeItem("usuario");
+  		localStorage.removeItem("tipoUsuario");
+      localStorage.removeItem("primernombreusuario");
+      localStorage.removeItem("segundonombreusuario");
+      localStorage.removeItem("primerapellidousuario");
+      localStorage.removeItem("segundoapellidousuario");
+  		window.location.href = "index.html";
+    }
+	});
+
+  function enviar_variables(){
+    var usuarioSesion = localStorage.getItem("usuario");
+    location.href="TrackingPadres.php?proced="+ usuarioSesion;
+  } 
+</script>
+</body>
+</html>

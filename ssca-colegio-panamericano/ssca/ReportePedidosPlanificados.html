@@ -1,0 +1,258 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>SSCA</title>
+        <link href="css/styler.css" rel="stylesheet"/>
+        <link href="css/menu.css" rel="stylesheet"/>
+        <script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+        <script type="text/javascript" src="js/style.js"></script>	
+        <script type="text/javascript" src="js/ConexionWebService.js"></script>
+        <script type="text/javascript" src="js/alertify.js"></script>
+        <link rel="stylesheet" href="css/alertify.core.css" />
+        <link rel="stylesheet" href="css/alertify.default.css" />
+        <link rel="stylesheet" type="text/css" href="dist/tablefilter/style/tablefilter.css">
+        <!--<script type="text/javascript" src="js/ValidacionUsuario.js"></script>-->
+        <link rel="stylesheet" media="screen" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.min.css">
+        <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.js"></script>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.js"></script>
+		<script src="js/script.js"></script>
+        <script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+       <style>
+			label, select{
+				color:#00C;
+			}
+		</style>
+    
+    
+    </head>
+    <body id="bodyBase">
+    <h4 style="color:#CCC;margin-left:10px; margin-top:5px">Bienvenido(a): <label id="usuarioSesion"></label></h4>
+<h2 align="right" style="margin-top:2%; margin-right:2%; color:#00C">Reportes para entrada de personal </h2>
+    <div id='cssmenu'>
+            <ul>
+               <li class="active"><a href='#' title="Gestion de Usuarios"><span>Gestion de Usuarios</span></a>
+                    <ul style="margin-right:-42%">
+                         <li><a href='UsuariosdelSistema.html' title="Usuarios del Sistema"><span>Usuarios del Sistema</span></a></li>
+                         <li class='last' title="Usuarios Aplicaciones" class="active"><a href='AdminUsuariosAplicaciones.html'><span>Usuarios de Aplicaciones</span></a></li>
+					</ul>
+               </li>
+               <li class=''><a href='#' title="Gestion Servicios del Sistema"><span>Gestion Servicios del Sistema</span></a>
+                  <ul style="margin-right:-42%">
+                     <li><a href='ServiciosdelSistema.html' title="Servicios del Sistema"><span>Servicios del Sistema</span></a></li>
+                     <li class='last'><a href='Reportes.html' title="Reportes"><span>Reportes</span></a></li>
+                  </ul>
+               </li>
+               <li class=''><a href='#' title="Gestion Servicios del Sistema"><span>Gestion Servicios Escolares</span></a>
+                  <ul style="margin-right:-42%">
+                     <li><a href='asignacion.php'><span>Servicios Escolares</span></a></li>
+                     <li><a href='PagosCuentaCobro.php'><span>Pago a Terceros</span></a></li>
+                     <li class='last'><a href='ReportesServiciosSistema.html'><span>Reportes</span></a></li>
+                  </ul>
+               </li>
+               <li class=''><a href='#' title="Puntos de Recarga"><span>Gestion de Credenciales</span></a>
+                  <ul style="margin-right:-42%">
+                     <li><a href='ReemplazarCredencial.html'><span>Remplazo de Credenciales</span></a></li>
+                     <li><a href='ReporteCredencial.html'><span>Reportes</span></a></li>
+                  </ul>
+               </li>
+               <li class=''><a href='#' title="Entrada y Salida de Personal"><span>Entrada y Salida de Personal</span></a>
+                    <ul style="margin-right:-42%">
+                         <li><a href='Estudiantes.html' title="Estudiantes"><span>Estudiantes</span></a></li>
+                         <li><a href='FuncionariosInternos.html' title="Funcionarios Internos"><span>Funcionarios Internos</span></a></li>
+                    </ul>
+               </li>
+            </ul>
+        </div>
+    <div class="contenidoBorde">
+        <br><br>
+       
+        <table id="demo" width="100%">
+            <thead>
+                <tr>
+                    <th>Nombres</th>
+                    <th>Apellidos</th>
+                    <th>Documento de Identificaciòn</th>
+                    <th>Hora de Entrega</th>
+                   	<th>Productos</th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+                
+                
+            </tbody>
+        </table>
+        
+      
+	</div>  
+      <script src="dist/tablefilter/tablefilter.js"></script>  
+      <script>
+            
+                //Configuracion de la tabla    
+                var filtersConfig = {
+                    base_path: 'dist/tablefilter/',
+                    paging: true,//Activar o no la paginacion
+                    results_per_page: ['Filas: ', [10,25,50,100]],//Numero de registros a mostrar en cada pagina
+                    auto_filter: true,//Aceptar o no filtro automatico cuando se empieza a escribir
+                    auto_filter_delay: 1100, //milliseconds
+                    filters_row_index: 1,
+                    remember_page_number: true,
+                    remember_page_length: true,
+                    alternate_rows: true,
+                    grid_layout: true,
+                    grid_width: '100%',//Ancho de la tabla
+                    alternate_rows: true,
+                    btn_reset: true,//Activar el boton de resetear los campos de filtro
+                    rows_counter: true,
+                    loader: true,
+                    status_bar: true,
+                    /*col_0: 'text',//Configurar el filtro de la columna con select
+                    col_1: 'text',//Configurar el filtro de la columna con select
+                    col_2: 'text',//Configurar el filtro de la columna con select
+                    col_3: 'text',//Configurar el filtro de la columna con select
+                    col_4: 'text',//Configurar el filtro de la columna con select
+                    col_5: 'text',//Configurar el filtro de la columna con select*/
+                    
+                    extensions:[
+                        {
+                            name: 'advancedGrid',
+                            // For the purpose of this demo, ezEditTable dependency
+                            // is loaded from its own website which is not a CDN.
+                            // This dependency also requires a licence therefore
+                            // DO NOT import it in this way in your projects.
+                            filename: 'ezEditTable_min.js',
+                            vendor_path: 'http://181.55.254.193/ssca/js/',
+                            // Once ezEditTable dependency is installed in your
+                            // project import it by pointing to a local path:
+                            // vendor_path: 'path/to/ezEditTable'
+                            editable: true,
+                            selection: true,
+                            default_selection: 'both',
+                            editor_model: 'cell',
+                            cell_editors: [
+                                { type: 'none', attributes:[['title', 'codigoProducto']]},
+                                { type: 'none', attributes:[['title', 'Nombre']]},
+                                { type: 'none', attributes:[['title', 'Descripcion']]},
+                                { type: 'none', attributes:[['title', 'Precio']]},
+                                { type: 'none', attributes:[['title', 'Categoria']]},
+                                { type: 'none', attributes:[['title', 'Subcategoria']]},
+                { type: 'none', attributes:[['title', 'Stock']]},
+                                { type: 'input', attributes:[['title', 'Cantidad']]},
+                { type: 'command',  
+                  buttons:{  
+                    enable: ['update', 'cancel'],  
+                    'update': { title:'Edit row' },  
+                    'cancel': { title:'Guardar',icon: 'http://tablefilter.free.fr/TableFilter/ezEditTable/themes/icn_add.gif'}                    
+                  }  
+                }  
+                            ],
+            
+                            actions:{
+                                'update': {  
+                                    uri: 'ActionCambiarStock.php', 
+                                    submit_method: 'ajax', 
+                                    form_method: 'POST', 
+                                    param_names: ['codigoProducto', 'nombre', 'descripcion', 'precio', 'categoria', 'subcategoria', 'stock', 'cantidad']
+                                }
+                            }
+                        }, {
+                            name: 'sort',
+                            types: [
+                                'number', 'string', 'string',
+                                'number', 'string', 'string',
+                                'number'
+                            ]
+                        }
+                    ]
+                };
+              
+                 var tf = new TableFilter('demo', filtersConfig);
+            </script> 
+      <script type="text/javascript">
+        /*
+          Fecha:      Octubre 24 de 2015
+          Descripcion:  Script para enviar los datos al webservice para que los inserte en la base de datos
+        
+        */
+        
+        //Valor guardado cuando se cierra un popup y se concreto una operación
+        var opcionSeleccionar = "";
+          
+        //Capturar evento del boton crear
+       
+        window.addEventListener('load',init);
+        function init(){
+          var usuarioSesion = localStorage.getItem("usuario"); 
+          
+          $("#usuarioSesion").html(usuarioSesion);
+          
+          
+			var date = new Date();
+			var dia = date.getDate();
+			var mes = (date.getMonth() + 1);
+			var year = date.getFullYear();
+			
+			if(dia < 10) {
+				dia = '0' + dia;
+			} 
+			
+			if(mes < 10) {
+				mes = '0' + mes;
+			} 
+			
+			var fechaActual = year + "-" + mes + "-" + dia;
+			var usuario = {
+				fecha: fechaActual
+			}   
+			//Se envian a la funcion que realiza la conexion al werbservice y genera una respuesta que se guarda en un localstorage
+			//EnviarDatos(usuario, "ActionReporteIngreso.php", "REPORTEINGRESO");
+			
+			
+		  $.post("ActionReportePedidosPlanificados.php", usuario)
+		  .done(function( data ) {
+			  if($.trim(data) != "[]"){
+				console.log(data);
+				var jsonUsuario = JSON.parse(data);
+				var html = '';
+				$.each(jsonUsuario, function(i, item) {
+				  /*html += '<b>Nombres: </b>' + jsonUsuario[i].PrimerNombre + ' ' + jsonUsuario[i].SegundoNombre + '<br><b>Apellidos: </b>' + jsonUsuario[i].PrimerApellido + ' ' + jsonUsuario[i].SegundoApellido + '<br><b>Tipo: </b>' + jsonUsuario[i].TipoUsuario + '<br><b>Documento de Identificación: </b>' + jsonUsuario[i].NumeroId + '<br><b>Fecha: </b>' + jsonUsuario[i].Fecha + '<br><b>Hora: </b>' + jsonUsuario[i].Hora + "<br><br>";*/
+				  
+					if((i + 1) % 2 == 1){
+					   html += '<tr class="even" validrow="true">' +
+						'<td>' + jsonUsuario[i].PrimerNombre + ' ' + jsonUsuario[i].SegundoNombre+ '</td>' +
+						'<td>' + jsonUsuario[i].PrimerApellido + ' ' + jsonUsuario[i].SegundoApellido + '</td>' +
+						'<td>' + jsonUsuario[i].NumeroId + '</td>' +
+						'<td>' + jsonUsuario[i].HoraEntrega + '</td>' +
+						'<td>' + jsonUsuario[i].DescripcionPedido + '</td>' +
+					  '</tr>';            
+					 }else{
+					   '<td>' + jsonUsuario[i].PrimerNombre + ' ' + jsonUsuario[i].SegundoNombre+ '</td>' +
+						'<td>' + jsonUsuario[i].PrimerApellido + ' ' + jsonUsuario[i].SegundoApellido + '</td>' +
+						'<td>' + jsonUsuario[i].NumeroId + '</td>' +
+						'<td>' + jsonUsuario[i].HoraEntrega + '</td>' +
+						'<td>' + jsonUsuario[i].DescripcionPedido + '</td>' +
+					  '</tr>';            
+					 }            
+				});
+				$("#tbody").html(html);
+				
+			   
+					tf.init();
+			  }
+		  
+		});
+        }
+        $("#Salir").click(function(e) {
+			localStorage.removeItem("usuario");
+			localStorage.removeItem("tipoUsuario");
+			window.location.href = "index.html";
+		});
+        
+      </script>
+        
+		<script src="js/jquery.js"></script>
+        <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.min.js"></script>    
+    </body>
+</html>

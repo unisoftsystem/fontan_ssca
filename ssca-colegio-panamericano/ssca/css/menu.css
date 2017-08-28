@@ -1,0 +1,124 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,300);
+@charset "UTF-8";
+/* Base Styles */
+@font-face {
+  font-family: "SegoeUiBold";
+  src: url(../fonts/SEGOEUIB.TTF) format("truetype");
+}
+@font-face {
+  font-family: "SegoeUiNormal";
+  src: url(../fonts/SEGOEUI.TTF) format("truetype");
+}
+#cssmenu,
+#cssmenu ul,
+#cssmenu li,
+#cssmenu a {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  list-style: none;
+  text-decoration: none;
+  line-height: 1;
+  font-family:'SegoeUiNormal'; 
+  font-size: 12px;
+  position: relative;
+}
+#cssmenu a {
+  line-height: 1.3;
+}
+#cssmenu {
+  width: 34%;
+  height:63%;
+  padding: 3px;
+  top: 3%;
+  float:left;
+  background-image:url(../images/barra-menu.png);
+  background-position:left;
+  background-size:auto 100%;
+  background-repeat:repeat-y;
+  position:relative;
+  overflow:auto;
+}
+#cssmenu > ul > li {
+  margin: 10px 0 15px 0;
+  font-family:'SegoeUiNormal'; 
+  background: url(../images/item.png) 100% top no-repeat;
+  background-position:0px 0px;
+  background-size:88%;
+  text-align:right;
+  padding-right:30%;
+  margin-left:5%;
+}
+#cssmenu > ul > li:last-child {
+  margin: 0;
+  margin-left:5%;
+}
+#cssmenu > ul > li > a {
+  font-size: 15px;
+  display: block;
+  color: #09C;
+  text-shadow: 0 1px 1px #000;
+  height:50px;  
+  margin-right:-16%;
+}
+#cssmenu > ul > li > a{
+  display: block; 
+  font-family:'SegoeUiNormal'; 
+  padding: 0px 10px;
+}
+#cssmenu > ul > li > a:hover {
+  text-decoration: none;
+  font-family:'SegoeUiBold'; 
+}
+#cssmenu > ul > li.active {
+  opacity:.9;
+  background-size:100%;
+}
+#cssmenu > ul > li.active ul li.active a {
+  font-family:'SegoeUiBold'; 
+}
+#cssmenu > ul > li.active > a {
+  text-shadow: 0 1px 1px #000;  
+}
+#cssmenu > ul > li.active > ul {
+  margin-right:25%;
+}
+#cssmenu > ul > li.active > a  {
+    margin-right:-12%;
+  font-size:14px;
+}
+#cssmenu > ul > li.has-sub > a  {
+  font-family:'SegoeUiNormal'; 
+}
+#cssmenu > ul > li.has-sub.active > a  {
+
+}
+/* Sub menu */
+#cssmenu ul ul {
+  padding: 0px 12px;
+  display: none;
+}
+#cssmenu ul ul li {
+  padding: 3px 0;
+}
+#cssmenu ul ul a {
+  display: block;
+  color: #036;
+  font-size: 13px;
+}
+
+#cssmenu ul ul a:hover {
+  
+}
+.desactive{
+  opacity:.5;
+}
+
+.contenidoBorde{
+	width: 64%; 
+	border:solid #CCC; 
+	height:68%; 
+	top:3%; 
+	position:relative;
+	overflow:auto;
+}

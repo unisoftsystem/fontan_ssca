@@ -1,0 +1,49 @@
+
+
+fieldset {
+	border: 1px solid #AAA;
+	padding: 0 1em;
+	margin: 1em 0;
+}
+
+a.boxclose{
+    float:right;
+    margin-top:-20px;
+    margin-right:-10px;
+    cursor:pointer;
+    display: inline-block;
+    line-height: 0px;
+    padding: 11px 3px;   
+    visibility:hidden;    
+}
+
+.drag {
+	height: 58px;
+	width: 58px;
+	top: 120px;
+}
+
+#container-field {
+	float: right;
+	width:400px;
+	height: 600px;
+	border: 1px dashed #888;
+	background: url('../img/bg.png') no-repeat;
+	background-size: cover;  
+	margin-right:400px;
+}
+
+#container-player {
+	float: left;
+	width:420px;
+	height: 600px;
+	border: 1px dashed #888;
+	background: #95a5a6;
+}
+
+.drag div {
+	font-size :10px;
+	margin-top:55px;
+	text-align: center;
+	font-weight: bold;
+}
