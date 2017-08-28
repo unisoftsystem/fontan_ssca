@@ -762,8 +762,7 @@ class Registro_control extends CI_Controller {
 		$idUsuario = "";
 
 		if(isset($_POST['_fecha']) && $_POST['_fecha'] != '') {
-			//$timestamp_fecha = strtotime($_POST['_fecha']);
-			$timestamp_fecha = strtotime("now");
+			$timestamp_fecha = strtotime($_POST['_fecha']);
 			$fecha = date("Y-m-d", $timestamp_fecha);	
 		}
 

@@ -4016,19 +4016,24 @@ class Rutas extends CI_Controller {
 		$DB_DBName = "ssca";        
 		$DB_TBLName = "log_ruta";
 		$filename = "Reporte log ruta ".$_GET['f'];
-		 // mensaje != 'geolocalizacion and' 
-		$sql = sprintf("SELECT CONCAT(PrimerApellido, ' ', SegundoApellido, ' ', PrimerNombre, ' ', SegundoNombre) as 'Nombre', hora AS 'Hora', 
-		tipo as 'Categoría mensaje', mensaje AS 'Mensaje', nombreruta As 'Ruta' 
-		FROM log_ruta a
-		LEFT JOIN usuarios ON usuarios.idUsuario = a.idestudiante
-		LEFT JOIN asignacionruta ON asignacionruta.id = a.idruta
-		WHERE fecha = '%s' AND mensaje NOT LIKE 'geolocalizacion'", $_GET['f']);
-		
+		$sql = sprintf("Select 
+			PrimerApellido, 
+			SegundoApellido, 
+			PrimerNombre, 
+			SegundoNombre, 
+			hora, 
+			mensaje, 
+			coordenadas_recogida 
+			from %s
+			inner join usuarios
+			on usuarios.NumeroId = log_ruta.idestudiante 
+			where fecha = '%s'", 
+			$DB_TBLName, $_GET['f']);
+		// exit($sql);
 		$Connect = @mysql_connect($DB_Server, $DB_Username, $DB_Password) or die("Couldn't connect to MySQL:<br>" . mysql_error() . "<br>" . mysql_errno());
 		$Db = @mysql_select_db($DB_DBName, $Connect) or die("Couldn't select database:<br>" . mysql_error(). "<br>" . mysql_errno());   
 		$result = @mysql_query($sql,$Connect) or die("Couldn't execute query:<br>" . mysql_error(). "<br>" . mysql_errno());    
 		$file_ending = "xls";
-
 		header("Content-Type: application/xls");    
 		header("Content-Disposition: attachment; filename=$filename.xls");  
 		header("Pragma: no-cache"); 
