@@ -1423,7 +1423,7 @@ class Rutas extends CI_Controller {
 											'tipo' => $tipo,
 											'idruta' => $idRuta,
 											'acudiente' => "",
-											'mensaje' => "Fue recogido en un sitio diferente sin usar credencial",
+											'mensaje' => "Fue recogido en un sitio diferente sin usar credencial en ruta diferente",
 											'session' => "");
 										$this->rutas_model->crearLogRuta($array);//Se llama a la funcion de que esta en modelo y el resultado se guarda
 
@@ -1503,7 +1503,7 @@ class Rutas extends CI_Controller {
 										$arrayAlerta = array(
 											'idUsuario' => $jsonUsuario[0]["idUsuario"],
 											'tipo' => "ALERTEACORREO",
-											'mensaje' => "Fue recogido en un sitio diferente sin usar credencial");
+											'mensaje' => "Fue recogido en un sitio diferente sin usar credencial en ruta diferente");
 										$this->rutas_model->crearAlerta($arrayAlerta);
 										echo json_encode($jsonUsuario);
 									}else{
@@ -1514,7 +1514,7 @@ class Rutas extends CI_Controller {
 											'tipo' => $tipo,
 											'idruta' => $idRuta,
 											'acudiente' => "",
-											'mensaje' => "Fue recogido correctamente",
+											'mensaje' => "Fue recogido correctamente sin usar credencial en ruta diferente",
 											'session' => "");
 										$this->rutas_model->crearLogRuta($array);//Se llama a la funcion de que esta en modelo y el resultado se guarda
 
@@ -1594,7 +1594,7 @@ class Rutas extends CI_Controller {
 										$arrayAlerta = array(
 											'idUsuario' => $jsonUsuario[0]["idUsuario"],
 											'tipo' => "ALERTEACORREO",
-											'mensaje' => "Fue recogido correctamente sin usar credencial");
+											'mensaje' => "Fue recogido correctamente sin usar credencial en ruta diferente");
 										$this->rutas_model->crearAlerta($arrayAlerta);
 										echo json_encode($jsonUsuario);
 									}
@@ -1620,7 +1620,7 @@ class Rutas extends CI_Controller {
 											'tipo' => $tipo,
 											'idruta' => $idRuta,
 											'acudiente' => "",
-											'mensaje' => "Fue recogido en un sitio diferente sin usar credencial",
+											'mensaje' => "Fue recogido en un sitio diferente sin usar credencial en ruta diferente",
 											'session' => "");
 										$this->rutas_model->crearLogRuta($array);//Se llama a la funcion de que esta en modelo y el resultado se guarda
 
@@ -2129,7 +2129,7 @@ class Rutas extends CI_Controller {
 									'tipo' => $tipo,
 									'idruta' => $idRuta,
 									'acudiente' => "",
-									'mensaje' => "Fue recogido en un sitio diferente",
+									'mensaje' => "Fue recogido en un sitio diferente en ruta diferente",
 									'session' => "");
 								$this->rutas_model->crearLogRuta($array);//Se llama a la funcion de que esta en modelo y el resultado se guarda
 
@@ -2209,7 +2209,7 @@ class Rutas extends CI_Controller {
 								$arrayAlerta = array(
 									'idUsuario' => $jsonUsuario[0]["idUsuario"],
 									'tipo' => "ALERTEACORREO",
-									'mensaje' => "Fue recogido en un sitio diferente");
+									'mensaje' => "Fue recogido en un sitio diferente en ruta diferente");
 								$this->rutas_model->crearAlerta($arrayAlerta);
 								echo json_encode($jsonUsuario);
 							}else{
@@ -2220,7 +2220,7 @@ class Rutas extends CI_Controller {
 									'tipo' => $tipo,
 									'idruta' => $idRuta,
 									'acudiente' => "",
-									'mensaje' => "Fue recogido correctamente",
+									'mensaje' => "Fue recogido correctamente en ruta diferente",
 									'session' => "");
 								$this->rutas_model->crearLogRuta($array);//Se llama a la funcion de que esta en modelo y el resultado se guarda
 
@@ -2300,7 +2300,7 @@ class Rutas extends CI_Controller {
 								$arrayAlerta = array(
 									'idUsuario' => $jsonUsuario[0]["idUsuario"],
 									'tipo' => "ALERTEACORREO",
-									'mensaje' => "Fue recogido correctamente");
+									'mensaje' => "Fue recogido correctamente en ruta diferente");
 								$this->rutas_model->crearAlerta($arrayAlerta);
 								echo json_encode($jsonUsuario);
 							}
@@ -2326,7 +2326,7 @@ class Rutas extends CI_Controller {
 									'tipo' => $tipo,
 									'idruta' => $idRuta,
 									'acudiente' => "",
-									'mensaje' => "Fue recogido en un sitio diferente",
+									'mensaje' => "Fue recogido en un sitio diferente en ruta diferente",
 									'session' => "");
 								$this->rutas_model->crearLogRuta($array);//Se llama a la funcion de que esta en modelo y el resultado se guarda
 
