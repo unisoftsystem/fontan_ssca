@@ -602,6 +602,7 @@
                     map: map,//el mapa creado en el paso anterior
                     position: latLng,//objeto con latitud y longitud
                     icon: pinSymbol(json[i].color),
+                    title: json[i].nombreConductor  + ' ' + json[i].apellidoConductor + ' / Ruta - ' + json[i].nombreruta + ' / Placa - ' + json[i].placa,
                     draggable: false //que el marcador se pueda arrastrar
                   });
                   
@@ -709,7 +710,7 @@
             if($.trim(data) != "[]"){
              
               var json = JSON.parse(data);
-              
+
               $.each(json, function(i, item) {
                 var latlon = new google.maps.LatLng(json[i].latitud,json[i].longitud);
                 waypts.push({

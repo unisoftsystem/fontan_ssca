@@ -6,7 +6,7 @@
 
 		"host": "190.60.211.17",
 		"username": "usc",  // or null for anonymous login
-		"password": "usc",
+		"password": "usc2017*",
 		"path": "/var/www/html/Fontan",
 
 		"upload_on_save": true, // set *false* if you do not want to upload on save!
