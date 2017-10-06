@@ -73,6 +73,29 @@ class Usuarios_sistema extends CI_Controller {
 		}
 	}
 
+	//Mostrar la vista de editar un usuario del sistema
+	function asignar_centro_operaciones(){
+		//Se valida si la pagina a acceder esta dentro de los pemisos del usuario que ha iniciado sesion
+		$validacion = $this->permisos_usuarios_sistema_model->verificarPagina("../usuarios_sistema/asignar_centro_operaciones", $this->session->userdata('UserIDInternoSSCA'));	
+
+		//Se verifica que el usuario tiene permiso a la pagina
+		if($validacion > 0){
+
+			//Se cargan los menus de los modulos, submodulos y servicios que estan en el controller services
+			$this->load->library('../controllers/services');
+			$data['menuPrincipal'] = $this->services->menuModulos($this->session->userdata('UserIDInternoSSCA'), $this->session->userdata('SegmentoTextoModulo'));	
+			$data['titulo'] = "Modificación de Usuarios del Sistema";//Titulo de la pagina, se lo envio al archivo donde esta el header
+			$this->load->library('../controllers/services');
+			$data['menuServicios'] = $this->services->menuServicios($this->session->userdata('UserIDInternoSSCA'), "", $this->session->userdata('SegmentoCodigoModulo'));
+
+			$this->load->view('header', $data);//Se muestra en el navegador primero el header con titulo y demas cosas agregada
+			$this->load->view('usuarios_sistema/asignar_centro_operaciones');//Se carga la vista que esta dentro de la carpeta
+		}else{
+			echo "<script>window.location.href = '" . base_url() . "index.php/usuarios_sistema/homeInternoModulos';</script>";//Se redirecciona a la pagina del home cuando el usuario que ha iniciado sesion no tiene permiso sobre la pagina que intenta ingresar
+		}
+	}
+
+
 	//Mostrar la vista de iniciar sesion de los usuario internos
 	function loginInterno(){
 		$this->session->unset_userdata('UserNameInternoSSCA');

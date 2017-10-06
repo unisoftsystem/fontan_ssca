@@ -1063,7 +1063,7 @@ class Rutas extends CI_Controller {
 												'tipo' => $tipo,
 												'idruta' => $idRuta,
 												'acudiente' => "",
-												'mensaje' => "Fue recogido en un sitio diferente",
+												'mensaje' => "Fue recogido en un sitio diferente sin usar credencial",
 												'session' => "");
 											$this->rutas_model->crearLogRuta($array);//Se llama a la funcion de que esta en modelo y el resultado se guarda
 
@@ -1143,7 +1143,7 @@ class Rutas extends CI_Controller {
 											$arrayAlerta = array(
 												'idUsuario' => $jsonUsuario[0]["idUsuario"],
 												'tipo' => "ALERTEACORREO",
-												'mensaje' => "Fue recogido en un sitio diferente");
+												'mensaje' => "Fue recogido en un sitio diferente sin usar credencial");
 											$this->rutas_model->crearAlerta($arrayAlerta);
 											echo json_encode($jsonUsuario);
 										}else{
@@ -1154,7 +1154,7 @@ class Rutas extends CI_Controller {
 												'tipo' => $tipo,
 												'idruta' => $idRuta,
 												'acudiente' => "",
-												'mensaje' => "Fue recogido correctamente",
+												'mensaje' => "Fue recogido correctamente sin usar credencial",
 												'session' => "");
 											$this->rutas_model->crearLogRuta($array);//Se llama a la funcion de que esta en modelo y el resultado se guarda
 
@@ -1234,7 +1234,7 @@ class Rutas extends CI_Controller {
 											$arrayAlerta = array(
 												'idUsuario' => $jsonUsuario[0]["idUsuario"],
 												'tipo' => "ALERTEACORREO",
-												'mensaje' => "Fue recogido correctamente");
+												'mensaje' => "Fue recogido correctamente sin usar credencial");
 											$this->rutas_model->crearAlerta($arrayAlerta);
 											echo json_encode($jsonUsuario);
 										}
@@ -1260,11 +1260,11 @@ class Rutas extends CI_Controller {
 												'tipo' => $tipo,
 												'idruta' => $idRuta,
 												'acudiente' => "",
-												'mensaje' => "Fue recogido en un sitio diferente",
+												'mensaje' => "Fue recogido en un sitio diferente sin usar credencial",
 												'session' => "");
 											$this->rutas_model->crearLogRuta($array);//Se llama a la funcion de que esta en modelo y el resultado se guarda
 
-											$jsonUsuario[0]["Mensaje"] = "Bajo del bus sin ningun inconveniente";
+											$jsonUsuario[0]["Mensaje"] = "Bajo del bus sin ningun inconveniente sin usar credencial";
 											$jsonUsuario[0]["CodigoConfirmacion"] = "1";
 											$jsonUsuario[0]["TipoRegistro"] = $tipo;
 											$estudianteName = $jsonUsuario[0]["PrimerNombre"] . " " . $jsonUsuario[0]["SegundoNombre"] . " " . $jsonUsuario[0]["PrimerApellido"] . " " . $jsonUsuario[0]["SegundoApellido"];
@@ -1353,10 +1353,366 @@ class Rutas extends CI_Controller {
 							}
 						}else{
 							$jsonUsuario[0]["Mensaje"] = "El estudiante no esta asignado a esta ruta";
-							$jsonUsuario[0]["CodigoConfirmacion"] = "0";
+							$jsonUsuario[0]["CodigoConfirmacion"] = "3";
 							$jsonUsuario[0]["TipoRegistro"] = $tipo;
 							echo json_encode($jsonUsuario);
 						}
+						
+					}else{
+						$jsonUsuario[0]["Mensaje"] = "No es estudiante";
+						$jsonUsuario[0]["CodigoConfirmacion"] = "0";
+						$jsonUsuario[0]["TipoRegistro"] = $tipo;
+						echo json_encode($jsonUsuario);
+					}
+
+				}else{
+					echo $respuestaCredencial;
+				}
+			}
+		}
+	}
+
+	function registro_recogida_sin_credencial_otra_ruta(){
+		$latitud = $_POST["latitud"];	
+		$longitud = $_POST["longitud"];
+		$fecha = date("Y-m-d");	
+		$hora = date("H:i:s");	
+		$tipo = $_POST["tipo"];	
+		$idRuta = $_POST["idRuta"];
+
+		$data = $this->usuarios_aplicaciones_model->ConsultarUsuarioUsuarioFuncionDoc($_POST["usuario"]);
+
+		if($data != null){
+			foreach ($data->result() as $value) {
+				$idCredencial = $value->idCredencial;
+
+				$respuestaCredencial = $this->credenciales_model->ConsultarUsuarioPorCredencial($idCredencial);
+
+
+				if($respuestaCredencial != "[]"){
+					$jsonUsuario = json_decode($respuestaCredencial, true);
+
+					if($jsonUsuario[0]["TipoUsuario"] == "Estudiante"){
+
+						// Validara si la ruta es dinamica
+						$is_dinamic_route = $this->rutas_model->is_dinamic_route($idRuta);
+						// verifivar la existencia del usuario
+						if($is_dinamic_route == 1) {
+							$usuarioTieneRuta = 1;
+						}else {
+							$usuarioTieneRuta = $this->rutas_model->existeUsuarioRuta($idRuta, $jsonUsuario[0]["idUsuario"]);
+						}
+
+						switch ($tipo) {
+							case "RECOGIDA":
+								$dataLog = $this->rutas_model->getlogRutaPorTipo($idRuta, $fecha, $tipo, $jsonUsuario[0]["idUsuario"]);
+
+								if($dataLog == null){
+									$latitudUsuario = $jsonUsuario[0]["latitud"];
+									$longitudUsuario = $jsonUsuario[0]["longitud"];
+
+									$point1 = array("lat" =>  $latitudUsuario, "long" => $longitudUsuario ); 
+									$point2 = array("lat" => $latitud, "long" => $longitud); 
+
+									$km = $this->distanceCalculation($point1['lat'], $point1['long'], $point2['lat'], $point2['long']); // Calcular la distancia en kilómetros (por defecto)
+
+									if($km > 1){
+										$coordenadas = $latitud . "," . $longitud;
+										$array = array(
+											'idestudiante' => $jsonUsuario[0]["idUsuario"],
+											'coordenadas_recogida' => $coordenadas,
+											'tipo' => $tipo,
+											'idruta' => $idRuta,
+											'acudiente' => "",
+											'mensaje' => "Fue recogido en un sitio diferente sin usar credencial en ruta diferente",
+											'session' => "");
+										$this->rutas_model->crearLogRuta($array);//Se llama a la funcion de que esta en modelo y el resultado se guarda
+
+										$jsonUsuario[0]["Mensaje"] = "Fue recogido en un sitio diferente";
+										$jsonUsuario[0]["CodigoConfirmacion"] = "1";
+										$jsonUsuario[0]["TipoRegistro"] = $tipo;
+										$estudianteName = $jsonUsuario[0]["PrimerNombre"] . " " . $jsonUsuario[0]["SegundoNombre"] . " " . $jsonUsuario[0]["PrimerApellido"] . " " . $jsonUsuario[0]["SegundoApellido"];
+
+										// Debes editar las próximas dos líneas de código de acuerdo con tus preferencias
+										$email_to = $jsonUsuario[0]["idAcudiente"];
+										$email_subject = "Informe Ingreso a Ruta Escolar";
+
+										// El mensaje
+										$mensaje = '<style type="text/css">
+											*{
+												margin: 0;
+												padding: 0;
+											}
+											.btn-primary {
+											    
+											}
+											.btn {
+											    
+											}
+										</style>
+										<img src="http://190.60.211.17/Fontan/img/parte-a-recogida.png" width="100%"/>
+										<img src="http://190.60.211.17/Fontan/img/parte-b-recogida.png" width="50%" style="float: left">
+										<div align="center" style="width: 50%; float: right">
+											<label style="font-size: 22px; color: #FFBF00; font-weight: 500">A trav&eacute;s de nuestro servicio de comunicaci&oacute;n y alertas de SSCA nos permitimos informar muy gratamente que el estudiante <b><i>' . $estudianteName . '</i></b>  fue recogido y ya se encuentra en nuestro bus escolar</label><br>
+											<a href="http://190.60.211.17/Fontan/index.php/rutas/contactenos?email=' . $email_to . '&name=' . $estudianteName . '" target="_blank"><button type="button" id="btnGenerarReporte" style="width: 90%; margin-top:	20px; padding: 12px 12px;
+											    margin-bottom: 0;
+											    font-size: 18px;
+											    font-weight: 400;
+											    line-height: 1.42857143;
+											    text-align: center;
+											    white-space: nowrap;
+											    vertical-align: middle;
+											    -ms-touch-action: manipulation;
+											    touch-action: manipulation;
+											    cursor: pointer;
+											    -webkit-user-select: none;
+											    -moz-user-select: none;
+											    -ms-user-select: none;
+											    user-select: none;
+											    border: 1px solid transparent;color: #fff;
+											    background-image: url(http://190.60.211.17/Fontan/img/textura.png);"><b>CONTACTESE CON NOSOTROS</b></button></a>
+										</div>
+										<div style="width:100%" align="center">
+											<hr width="98%" size="8" style="background-image: url(http://190.60.211.17/Fontan/img/azul.png); margin-top:35px; border: none">	
+										</div>
+										<table width="100%" border="0">
+											<tr>
+												<td width="20px">&nbsp;</td>
+												<td><label style="color: #2E64FE; ">Cont&aacute;ctenos: 0180001124587 Bogot&aacute; Colombia</label></td>
+												<td><img src="http://190.60.211.17/Fontan/img/tel.png" width="36px"></td>
+												<td>
+													<div style="width: 100%">
+														<a target="_blank" href="https://www.facebook.com/SSCA-535192806677054/"><img src="http://190.60.211.17/Fontan/img/facebook_C.png" width="36px" style="opacity: 1"></a>
+								                        <a target="_blank" href="https://twitter.com/sscacolombia"><img src="http://190.60.211.17/Fontan/img/Twitter_C.png" width="36px"></a>
+								                        <a target="_blank" href="https://www.youtube.com/channel/UCkZ6kVJWgmS9vQJ3_mK5NAA"><img src="http://190.60.211.17/Fontan/img/Youtube_C.png" width="36px"></a>
+								                        <a target="_blank" href="https://plus.google.com/109158087234743471968"><img src="http://190.60.211.17/Fontan/img/google_C.png" width="36px"></a>  
+													</div>
+												</td>
+											</tr>
+										</table>';										
+										
+										
+
+										$configuraciones["mailtype"] = 'html';
+										$this->email->initialize($configuraciones);
+										$this->email->from('ruta@ssca.com', 'SSCA – Servicios Escolares Colegio Fontán');
+										$this->email->to($email_to);
+										$this->email->subject($email_subject);
+										$this->email->message($mensaje);
+										$this->email->send();
+
+										$arrayAlerta = array(
+											'idUsuario' => $jsonUsuario[0]["idUsuario"],
+											'tipo' => "ALERTEACORREO",
+											'mensaje' => "Fue recogido en un sitio diferente sin usar credencial en ruta diferente");
+										$this->rutas_model->crearAlerta($arrayAlerta);
+										echo json_encode($jsonUsuario);
+									}else{
+										$coordenadas = $latitud . "," . $longitud;
+										$array = array(
+											'idestudiante' => $jsonUsuario[0]["idUsuario"],
+											'coordenadas_recogida' => $coordenadas,
+											'tipo' => $tipo,
+											'idruta' => $idRuta,
+											'acudiente' => "",
+											'mensaje' => "Fue recogido correctamente sin usar credencial en ruta diferente",
+											'session' => "");
+										$this->rutas_model->crearLogRuta($array);//Se llama a la funcion de que esta en modelo y el resultado se guarda
+
+										$jsonUsuario[0]["Mensaje"] = "Fue recogido correctamente";
+										$jsonUsuario[0]["CodigoConfirmacion"] = "1";
+										$jsonUsuario[0]["TipoRegistro"] = $tipo;	
+										$estudianteName = $jsonUsuario[0]["PrimerNombre"] . " " . $jsonUsuario[0]["SegundoNombre"] . " " . $jsonUsuario[0]["PrimerApellido"] . " " . $jsonUsuario[0]["SegundoApellido"];
+
+										// Debes editar las próximas dos líneas de código de acuerdo con tus preferencias
+										$email_to = $jsonUsuario[0]["idAcudiente"];
+										$email_subject = "Informe Ingreso a Ruta Escolar";
+
+										// El mensaje
+										$mensaje = '<style type="text/css">
+											*{
+												margin: 0;
+												padding: 0;
+											}
+											.btn-primary {
+											    
+											}
+											.btn {
+											    
+											}
+										</style>
+										<img src="http://190.60.211.17/Fontan/img/parte-a-recogida.png" width="100%"/>
+										<img src="http://190.60.211.17/Fontan/img/parte-b-recogida.png" width="50%" style="float: left">
+										<div align="center" style="width: 50%; float: right">
+											<label style="font-size: 22px; color: #FFBF00; font-weight: 500">A trav&eacute;s de nuestro servicio de comunicaci&oacute;n y alertas de SSCA nos permitimos informar muy gratamente que el estudiante <b><i>' . $estudianteName . '</i></b>  fue recogido y ya se encuentra en nuestro bus escolar</label><br>
+											<a href="http://190.60.211.17/Fontan/index.php/rutas/contactenos?email=' . $email_to . '&name=' . $estudianteName . '" target="_blank"><button type="button" id="btnGenerarReporte" style="width: 90%; margin-top:	20px; padding: 12px 12px;
+											    margin-bottom: 0;
+											    font-size: 18px;
+											    font-weight: 400;
+											    line-height: 1.42857143;
+											    text-align: center;
+											    white-space: nowrap;
+											    vertical-align: middle;
+											    -ms-touch-action: manipulation;
+											    touch-action: manipulation;
+											    cursor: pointer;
+											    -webkit-user-select: none;
+											    -moz-user-select: none;
+											    -ms-user-select: none;
+											    user-select: none;
+											    border: 1px solid transparent;color: #fff;
+											    background-image: url(http://190.60.211.17/Fontan/img/textura.png);"><b>CONTACTESE CON NOSOTROS</b></button></a>
+										</div>
+										<div style="width:100%" align="center">
+											<hr width="98%" size="8" style="background-image: url(http://190.60.211.17/Fontan/img/azul.png); margin-top:35px; border: none">	
+										</div>
+										<table width="100%" border="0">
+											<tr>
+												<td width="20px">&nbsp;</td>
+												<td><label style="color: #2E64FE; ">Cont&aacute;ctenos: 0180001124587 Bogot&aacute; Colombia</label></td>
+												<td><img src="http://190.60.211.17/Fontan/img/tel.png" width="36px"></td>
+												<td>
+													<div style="width: 100%">
+														<a target="_blank" href="https://www.facebook.com/SSCA-535192806677054/"><img src="http://190.60.211.17/Fontan/img/facebook_C.png" width="36px" style="opacity: 1"></a>
+								                        <a target="_blank" href="https://twitter.com/sscacolombia"><img src="http://190.60.211.17/Fontan/img/Twitter_C.png" width="36px"></a>
+								                        <a target="_blank" href="https://www.youtube.com/channel/UCkZ6kVJWgmS9vQJ3_mK5NAA"><img src="http://190.60.211.17/Fontan/img/Youtube_C.png" width="36px"></a>
+								                        <a target="_blank" href="https://plus.google.com/109158087234743471968"><img src="http://190.60.211.17/Fontan/img/google_C.png" width="36px"></a>  
+													</div>
+												</td>
+											</tr>
+										</table>';										
+										
+										
+
+										$configuraciones["mailtype"] = 'html';
+										$this->email->initialize($configuraciones);
+										$this->email->from('ruta@ssca.com', 'SSCA – Servicios Escolares Colegio Fontán');
+										$this->email->to($email_to);
+										$this->email->subject($email_subject);
+										$this->email->message($mensaje);
+										$this->email->send();
+
+										$arrayAlerta = array(
+											'idUsuario' => $jsonUsuario[0]["idUsuario"],
+											'tipo' => "ALERTEACORREO",
+											'mensaje' => "Fue recogido correctamente sin usar credencial en ruta diferente");
+										$this->rutas_model->crearAlerta($arrayAlerta);
+										echo json_encode($jsonUsuario);
+									}
+								}else{
+									$jsonUsuario[0]["Mensaje"] = "El estudiante ya se ha recogido el dia de hoy en esta ruta";
+									$jsonUsuario[0]["CodigoConfirmacion"] = "0";
+									$jsonUsuario[0]["TipoRegistro"] = $tipo;
+									echo json_encode($jsonUsuario);
+								}
+								break;
+
+							case "BAJADA":
+								$dataLog = $this->rutas_model->getlogRutaPorTipo($idRuta, $fecha, $tipo, $jsonUsuario[0]["idUsuario"]);
+
+								if($dataLog == null){
+									$dataLogValidar = $this->rutas_model->getlogRutaPorTipo($idRuta, $fecha, "RECOGIDA", $jsonUsuario[0]["idUsuario"]);
+
+									if($dataLogValidar != null){
+										$coordenadas = $latitud . "," . $longitud;
+										$array = array(
+											'idestudiante' => $jsonUsuario[0]["idUsuario"],
+											'coordenadas_recogida' => $coordenadas,
+											'tipo' => $tipo,
+											'idruta' => $idRuta,
+											'acudiente' => "",
+											'mensaje' => "Fue recogido en un sitio diferente sin usar credencial en ruta diferente",
+											'session' => "");
+										$this->rutas_model->crearLogRuta($array);//Se llama a la funcion de que esta en modelo y el resultado se guarda
+
+										$jsonUsuario[0]["Mensaje"] = "Bajo del bus sin ningun inconveniente";
+										$jsonUsuario[0]["CodigoConfirmacion"] = "1";
+										$jsonUsuario[0]["TipoRegistro"] = $tipo;
+										$estudianteName = $jsonUsuario[0]["PrimerNombre"] . " " . $jsonUsuario[0]["SegundoNombre"] . " " . $jsonUsuario[0]["PrimerApellido"] . " " . $jsonUsuario[0]["SegundoApellido"];
+
+										// Debes editar las próximas dos líneas de código de acuerdo con tus preferencias
+										$email_to = $jsonUsuario[0]["idAcudiente"];
+										$email_subject = "Informe Ruta Escolar llegada a Destino";
+
+										
+										// El mensaje
+										$mensaje = '<style type="text/css">
+											*{
+												margin: 0;
+												padding: 0;
+											}
+											.btn-primary {
+											    
+											}
+											.btn {
+											    
+											}
+										</style>
+										<img src="http://190.60.211.17/Fontan/img/parte-a-recogida.png" width="100%"/>
+										<img src="http://190.60.211.17/Fontan/img/parte-b-recogida.png" width="50%" style="float: left">
+										<div align="center" style="width: 50%; float: right">
+											<label style="font-size: 22px; color: #FFBF00; font-weight: 500">A trav&eacute;s de nuestro servicio de comunicaci&oacute;n y alertas de SSCA nos permitimos informar muy gratamente que el estudiante <b><i>' . $estudianteName . '</i></b> ha llegado a su destino</label><br>
+											<a href="http://190.60.211.17/Fontan/index.php/rutas/contactenos?email=' . $email_to . '&name=' . $estudianteName . '" target="_blank"><button type="button" id="btnGenerarReporte" style="width: 90%; margin-top:	20px; padding: 12px 12px;
+											    margin-bottom: 0;
+											    font-size: 18px;
+											    font-weight: 400;
+											    line-height: 1.42857143;
+											    text-align: center;
+											    white-space: nowrap;
+											    vertical-align: middle;
+											    -ms-touch-action: manipulation;
+											    touch-action: manipulation;
+											    cursor: pointer;
+											    -webkit-user-select: none;
+											    -moz-user-select: none;
+											    -ms-user-select: none;
+											    user-select: none;
+											    border: 1px solid transparent;color: #fff;
+											    background-image: url(http://190.60.211.17/Fontan/img/textura.png);"><b>CONTACTESE CON NOSOTROS</b></button></a>
+										</div>
+										<div style="width:100%" align="center">
+											<hr width="98%" size="8" style="background-image: url(http://190.60.211.17/Fontan/img/azul.png); margin-top:35px; border: none">	
+										</div>
+										<table width="100%" border="0">
+											<tr>
+												<td width="20px">&nbsp;</td>
+												<td><label style="color: #2E64FE; ">Cont&aacute;ctenos: 0180001124587 Bogot&aacute; Colombia</label></td>
+												<td><img src="http://190.60.211.17/Fontan/img/tel.png" width="36px"></td>
+												<td>
+													<div style="width: 100%">
+														<a target="_blank" href="https://www.facebook.com/SSCA-535192806677054/"><img src="http://190.60.211.17/Fontan/img/facebook_C.png" width="36px" style="opacity: 1"></a>
+								                        <a target="_blank" href="https://twitter.com/sscacolombia"><img src="http://190.60.211.17/Fontan/img/Twitter_C.png" width="36px"></a>
+								                        <a target="_blank" href="https://www.youtube.com/channel/UCkZ6kVJWgmS9vQJ3_mK5NAA"><img src="http://190.60.211.17/Fontan/img/Youtube_C.png" width="36px"></a>
+								                        <a target="_blank" href="https://plus.google.com/109158087234743471968"><img src="http://190.60.211.17/Fontan/img/google_C.png" width="36px"></a>  
+													</div>
+												</td>
+											</tr>
+										</table>';									
+											
+										
+										$configuraciones["mailtype"] = 'html';
+										$this->email->initialize($configuraciones);
+										$this->email->from('ruta@ssca.com', 'SSCA – Servicios Escolares Colegio Fontán');
+										$this->email->to($email_to);
+										$this->email->subject($email_subject);
+										$this->email->message($mensaje);
+										$this->email->send();
+										echo json_encode($jsonUsuario);
+									}else{
+										$jsonUsuario[0]["Mensaje"] = "El estudiante no se ha recogido el dia de hoy en esta ruta";
+										$jsonUsuario[0]["CodigoConfirmacion"] = "0";
+										$jsonUsuario[0]["TipoRegistro"] = $tipo;
+										echo json_encode($jsonUsuario);
+									}
+								}else{
+									$jsonUsuario[0]["Mensaje"] = "El estudiante ya se ha entregado el dia de hoy en esta ruta";
+									$jsonUsuario[0]["CodigoConfirmacion"] = "0";
+									$jsonUsuario[0]["TipoRegistro"] = $tipo;
+									echo json_encode($jsonUsuario);
+								}
+								break;	
+						}
+						
 						
 					}else{
 						$jsonUsuario[0]["Mensaje"] = "No es estudiante";
@@ -1710,10 +2066,359 @@ class Rutas extends CI_Controller {
 					}
 				}else{
 					$jsonUsuario[0]["Mensaje"] = "El estudiante no esta asignado a esta ruta";
-					$jsonUsuario[0]["CodigoConfirmacion"] = "0";
+					$jsonUsuario[0]["CodigoConfirmacion"] = "3";
 					$jsonUsuario[0]["TipoRegistro"] = $tipo;
 					echo json_encode($jsonUsuario);
 				}
+				
+			}else{
+				$jsonUsuario[0]["Mensaje"] = "No es estudiante";
+				$jsonUsuario[0]["CodigoConfirmacion"] = "0";
+				$jsonUsuario[0]["TipoRegistro"] = $tipo;
+				echo json_encode($jsonUsuario);
+			}
+
+		}else{
+			echo $respuestaCredencial;
+		}
+	}
+
+	function registro_recogida_otra_ruta(){
+		$latitud = $_POST["latitud"];	
+		$longitud = $_POST["longitud"];
+		$idCredencial = $_POST["idCredencial"];
+		$fecha = date("Y-m-d");	
+		$hora = date("H:i:s");	
+		$tipo = $_POST["tipo"];	
+		$idRuta = $_POST["idRuta"];
+
+
+		$respuestaCredencial = $this->credenciales_model->ConsultarUsuarioPorCredencial($idCredencial);
+
+		if($respuestaCredencial != "[]"){
+			$jsonUsuario = json_decode($respuestaCredencial, true);
+
+			if($jsonUsuario[0]["TipoUsuario"] == "Estudiante"){
+
+				// Validara si la ruta es dinamica
+				$is_dinamic_route = $this->rutas_model->is_dinamic_route($idRuta);
+				// verifivar la existencia del usuario
+				if($is_dinamic_route == 1) {
+					$usuarioTieneRuta = 1;
+				}else {
+					$usuarioTieneRuta = $this->rutas_model->existeUsuarioRuta($idRuta, $jsonUsuario[0]["idUsuario"]);
+				}
+
+				switch ($tipo) {
+					case "RECOGIDA":
+						$dataLog = $this->rutas_model->getlogRutaPorTipo($idRuta, $fecha, $tipo, $jsonUsuario[0]["idUsuario"]);
+
+						if($dataLog == null){
+							$latitudUsuario = $jsonUsuario[0]["latitud"];
+							$longitudUsuario = $jsonUsuario[0]["longitud"];
+
+							$point1 = array("lat" =>  $latitudUsuario, "long" => $longitudUsuario ); 
+							$point2 = array("lat" => $latitud, "long" => $longitud); 
+
+							$km = $this->distanceCalculation($point1['lat'], $point1['long'], $point2['lat'], $point2['long']); // Calcular la distancia en kilómetros (por defecto)
+
+							if($km > 1){
+								$coordenadas = $latitud . "," . $longitud;
+								$array = array(
+									'idestudiante' => $jsonUsuario[0]["idUsuario"],
+									'coordenadas_recogida' => $coordenadas,
+									'tipo' => $tipo,
+									'idruta' => $idRuta,
+									'acudiente' => "",
+									'mensaje' => "Fue recogido en un sitio diferente en ruta diferente",
+									'session' => "");
+								$this->rutas_model->crearLogRuta($array);//Se llama a la funcion de que esta en modelo y el resultado se guarda
+
+								$jsonUsuario[0]["Mensaje"] = "Fue recogido en un sitio diferente";
+								$jsonUsuario[0]["CodigoConfirmacion"] = "1";
+								$jsonUsuario[0]["TipoRegistro"] = $tipo;
+								$estudianteName = $jsonUsuario[0]["PrimerNombre"] . " " . $jsonUsuario[0]["SegundoNombre"] . " " . $jsonUsuario[0]["PrimerApellido"] . " " . $jsonUsuario[0]["SegundoApellido"];
+
+								// Debes editar las próximas dos líneas de código de acuerdo con tus preferencias
+								$email_to = $jsonUsuario[0]["idAcudiente"];
+								$email_subject = "Informe Ingreso a Ruta Escolar";
+
+								// El mensaje
+								$mensaje = '<style type="text/css">
+									*{
+										margin: 0;
+										padding: 0;
+									}
+									.btn-primary {
+									    
+									}
+									.btn {
+									    
+									}
+								</style>
+								<img src="http://190.60.211.17/Fontan/img/parte-a-recogida.png" width="100%"/>
+								<img src="http://190.60.211.17/Fontan/img/parte-b-recogida.png" width="50%" style="float: left">
+								<div align="center" style="width: 50%; float: right">
+									<label style="font-size: 22px; color: #FFBF00; font-weight: 500">A trav&eacute;s de nuestro servicio de comunicaci&oacute;n y alertas de SSCA nos permitimos informar muy gratamente que el estudiante <b><i>' . $estudianteName . '</i></b>  fue recogido y ya se encuentra en nuestro bus escolar</label><br>
+									<a href="http://190.60.211.17/Fontan/index.php/rutas/contactenos?email=' . $email_to . '&name=' . $estudianteName . '" target="_blank"><button type="button" id="btnGenerarReporte" style="width: 90%; margin-top:	20px; padding: 12px 12px;
+									    margin-bottom: 0;
+									    font-size: 18px;
+									    font-weight: 400;
+									    line-height: 1.42857143;
+									    text-align: center;
+									    white-space: nowrap;
+									    vertical-align: middle;
+									    -ms-touch-action: manipulation;
+									    touch-action: manipulation;
+									    cursor: pointer;
+									    -webkit-user-select: none;
+									    -moz-user-select: none;
+									    -ms-user-select: none;
+									    user-select: none;
+									    border: 1px solid transparent;color: #fff;
+									    background-image: url(http://190.60.211.17/Fontan/img/textura.png);"><b>CONTACTESE CON NOSOTROS</b></button></a>
+								</div>
+								<div style="width:100%" align="center">
+									<hr width="98%" size="8" style="background-image: url(http://190.60.211.17/Fontan/img/azul.png); margin-top:35px; border: none">	
+								</div>
+								<table width="100%" border="0">
+									<tr>
+										<td width="20px">&nbsp;</td>
+										<td><label style="color: #2E64FE; ">Cont&aacute;ctenos: 0180001124587 Bogot&aacute; Colombia</label></td>
+										<td><img src="http://190.60.211.17/Fontan/img/tel.png" width="36px"></td>
+										<td>
+											<div style="width: 100%">
+												<a target="_blank" href="https://www.facebook.com/SSCA-535192806677054/"><img src="http://190.60.211.17/Fontan/img/facebook_C.png" width="36px" style="opacity: 1"></a>
+						                        <a target="_blank" href="https://twitter.com/sscacolombia"><img src="http://190.60.211.17/Fontan/img/Twitter_C.png" width="36px"></a>
+						                        <a target="_blank" href="https://www.youtube.com/channel/UCkZ6kVJWgmS9vQJ3_mK5NAA"><img src="http://190.60.211.17/Fontan/img/Youtube_C.png" width="36px"></a>
+						                        <a target="_blank" href="https://plus.google.com/109158087234743471968"><img src="http://190.60.211.17/Fontan/img/google_C.png" width="36px"></a>  
+											</div>
+										</td>
+									</tr>
+								</table>';										
+								
+								
+
+								$configuraciones["mailtype"] = 'html';
+								$this->email->initialize($configuraciones);
+								$this->email->from('ruta@ssca.com', 'SSCA – Servicios Escolares Colegio Fontán');
+								$this->email->to($email_to);
+								$this->email->subject($email_subject);
+								$this->email->message($mensaje);
+								$this->email->send();
+
+								$arrayAlerta = array(
+									'idUsuario' => $jsonUsuario[0]["idUsuario"],
+									'tipo' => "ALERTEACORREO",
+									'mensaje' => "Fue recogido en un sitio diferente en ruta diferente");
+								$this->rutas_model->crearAlerta($arrayAlerta);
+								echo json_encode($jsonUsuario);
+							}else{
+								$coordenadas = $latitud . "," . $longitud;
+								$array = array(
+									'idestudiante' => $jsonUsuario[0]["idUsuario"],
+									'coordenadas_recogida' => $coordenadas,
+									'tipo' => $tipo,
+									'idruta' => $idRuta,
+									'acudiente' => "",
+									'mensaje' => "Fue recogido correctamente en ruta diferente",
+									'session' => "");
+								$this->rutas_model->crearLogRuta($array);//Se llama a la funcion de que esta en modelo y el resultado se guarda
+
+								$jsonUsuario[0]["Mensaje"] = "Fue recogido correctamente";
+								$jsonUsuario[0]["CodigoConfirmacion"] = "1";
+								$jsonUsuario[0]["TipoRegistro"] = $tipo;	
+								$estudianteName = $jsonUsuario[0]["PrimerNombre"] . " " . $jsonUsuario[0]["SegundoNombre"] . " " . $jsonUsuario[0]["PrimerApellido"] . " " . $jsonUsuario[0]["SegundoApellido"];
+
+								// Debes editar las próximas dos líneas de código de acuerdo con tus preferencias
+								$email_to = $jsonUsuario[0]["idAcudiente"];
+								$email_subject = "Informe Ingreso a Ruta Escolar";
+
+								// El mensaje
+								$mensaje = '<style type="text/css">
+									*{
+										margin: 0;
+										padding: 0;
+									}
+									.btn-primary {
+									    
+									}
+									.btn {
+									    
+									}
+								</style>
+								<img src="http://190.60.211.17/Fontan/img/parte-a-recogida.png" width="100%"/>
+								<img src="http://190.60.211.17/Fontan/img/parte-b-recogida.png" width="50%" style="float: left">
+								<div align="center" style="width: 50%; float: right">
+									<label style="font-size: 22px; color: #FFBF00; font-weight: 500">A trav&eacute;s de nuestro servicio de comunicaci&oacute;n y alertas de SSCA nos permitimos informar muy gratamente que el estudiante <b><i>' . $estudianteName . '</i></b>  fue recogido y ya se encuentra en nuestro bus escolar</label><br>
+									<a href="http://190.60.211.17/Fontan/index.php/rutas/contactenos?email=' . $email_to . '&name=' . $estudianteName . '" target="_blank"><button type="button" id="btnGenerarReporte" style="width: 90%; margin-top:	20px; padding: 12px 12px;
+									    margin-bottom: 0;
+									    font-size: 18px;
+									    font-weight: 400;
+									    line-height: 1.42857143;
+									    text-align: center;
+									    white-space: nowrap;
+									    vertical-align: middle;
+									    -ms-touch-action: manipulation;
+									    touch-action: manipulation;
+									    cursor: pointer;
+									    -webkit-user-select: none;
+									    -moz-user-select: none;
+									    -ms-user-select: none;
+									    user-select: none;
+									    border: 1px solid transparent;color: #fff;
+									    background-image: url(http://190.60.211.17/Fontan/img/textura.png);"><b>CONTACTESE CON NOSOTROS</b></button></a>
+								</div>
+								<div style="width:100%" align="center">
+									<hr width="98%" size="8" style="background-image: url(http://190.60.211.17/Fontan/img/azul.png); margin-top:35px; border: none">	
+								</div>
+								<table width="100%" border="0">
+									<tr>
+										<td width="20px">&nbsp;</td>
+										<td><label style="color: #2E64FE; ">Cont&aacute;ctenos: 0180001124587 Bogot&aacute; Colombia</label></td>
+										<td><img src="http://190.60.211.17/Fontan/img/tel.png" width="36px"></td>
+										<td>
+											<div style="width: 100%">
+												<a target="_blank" href="https://www.facebook.com/SSCA-535192806677054/"><img src="http://190.60.211.17/Fontan/img/facebook_C.png" width="36px" style="opacity: 1"></a>
+						                        <a target="_blank" href="https://twitter.com/sscacolombia"><img src="http://190.60.211.17/Fontan/img/Twitter_C.png" width="36px"></a>
+						                        <a target="_blank" href="https://www.youtube.com/channel/UCkZ6kVJWgmS9vQJ3_mK5NAA"><img src="http://190.60.211.17/Fontan/img/Youtube_C.png" width="36px"></a>
+						                        <a target="_blank" href="https://plus.google.com/109158087234743471968"><img src="http://190.60.211.17/Fontan/img/google_C.png" width="36px"></a>  
+											</div>
+										</td>
+									</tr>
+								</table>';										
+								
+								
+
+								$configuraciones["mailtype"] = 'html';
+								$this->email->initialize($configuraciones);
+								$this->email->from('ruta@ssca.com', 'SSCA – Servicios Escolares Colegio Fontán');
+								$this->email->to($email_to);
+								$this->email->subject($email_subject);
+								$this->email->message($mensaje);
+								$this->email->send();
+
+								$arrayAlerta = array(
+									'idUsuario' => $jsonUsuario[0]["idUsuario"],
+									'tipo' => "ALERTEACORREO",
+									'mensaje' => "Fue recogido correctamente en ruta diferente");
+								$this->rutas_model->crearAlerta($arrayAlerta);
+								echo json_encode($jsonUsuario);
+							}
+						}else{
+							$jsonUsuario[0]["Mensaje"] = "El estudiante ya se ha recogido el dia de hoy en esta ruta";
+							$jsonUsuario[0]["CodigoConfirmacion"] = "0";
+							$jsonUsuario[0]["TipoRegistro"] = $tipo;
+							echo json_encode($jsonUsuario);
+						}
+						break;
+
+					case "BAJADA":
+						$dataLog = $this->rutas_model->getlogRutaPorTipo($idRuta, $fecha, $tipo, $jsonUsuario[0]["idUsuario"]);
+
+						if($dataLog == null){
+							$dataLogValidar = $this->rutas_model->getlogRutaPorTipo($idRuta, $fecha, "RECOGIDA", $jsonUsuario[0]["idUsuario"]);
+
+							if($dataLogValidar != null){
+								$coordenadas = $latitud . "," . $longitud;
+								$array = array(
+									'idestudiante' => $jsonUsuario[0]["idUsuario"],
+									'coordenadas_recogida' => $coordenadas,
+									'tipo' => $tipo,
+									'idruta' => $idRuta,
+									'acudiente' => "",
+									'mensaje' => "Fue recogido en un sitio diferente en ruta diferente",
+									'session' => "");
+								$this->rutas_model->crearLogRuta($array);//Se llama a la funcion de que esta en modelo y el resultado se guarda
+
+								$jsonUsuario[0]["Mensaje"] = "Bajo del bus sin ningun inconveniente";
+								$jsonUsuario[0]["CodigoConfirmacion"] = "1";
+								$jsonUsuario[0]["TipoRegistro"] = $tipo;
+								$estudianteName = $jsonUsuario[0]["PrimerNombre"] . " " . $jsonUsuario[0]["SegundoNombre"] . " " . $jsonUsuario[0]["PrimerApellido"] . " " . $jsonUsuario[0]["SegundoApellido"];
+
+								// Debes editar las próximas dos líneas de código de acuerdo con tus preferencias
+								$email_to = $jsonUsuario[0]["idAcudiente"];
+								$email_subject = "Informe Ruta Escolar llegada a Destino";
+
+								
+								// El mensaje
+								$mensaje = '<style type="text/css">
+									*{
+										margin: 0;
+										padding: 0;
+									}
+									.btn-primary {
+									    
+									}
+									.btn {
+									    
+									}
+								</style>
+								<img src="http://190.60.211.17/Fontan/img/parte-a-recogida.png" width="100%"/>
+								<img src="http://190.60.211.17/Fontan/img/parte-b-recogida.png" width="50%" style="float: left">
+								<div align="center" style="width: 50%; float: right">
+									<label style="font-size: 22px; color: #FFBF00; font-weight: 500">A trav&eacute;s de nuestro servicio de comunicaci&oacute;n y alertas de SSCA nos permitimos informar muy gratamente que el estudiante <b><i>' . $estudianteName . '</i></b> ha llegado a su destino</label><br>
+									<a href="http://190.60.211.17/Fontan/index.php/rutas/contactenos?email=' . $email_to . '&name=' . $estudianteName . '" target="_blank"><button type="button" id="btnGenerarReporte" style="width: 90%; margin-top:	20px; padding: 12px 12px;
+									    margin-bottom: 0;
+									    font-size: 18px;
+									    font-weight: 400;
+									    line-height: 1.42857143;
+									    text-align: center;
+									    white-space: nowrap;
+									    vertical-align: middle;
+									    -ms-touch-action: manipulation;
+									    touch-action: manipulation;
+									    cursor: pointer;
+									    -webkit-user-select: none;
+									    -moz-user-select: none;
+									    -ms-user-select: none;
+									    user-select: none;
+									    border: 1px solid transparent;color: #fff;
+									    background-image: url(http://190.60.211.17/Fontan/img/textura.png);"><b>CONTACTESE CON NOSOTROS</b></button></a>
+								</div>
+								<div style="width:100%" align="center">
+									<hr width="98%" size="8" style="background-image: url(http://190.60.211.17/Fontan/img/azul.png); margin-top:35px; border: none">	
+								</div>
+								<table width="100%" border="0">
+									<tr>
+										<td width="20px">&nbsp;</td>
+										<td><label style="color: #2E64FE; ">Cont&aacute;ctenos: 0180001124587 Bogot&aacute; Colombia</label></td>
+										<td><img src="http://190.60.211.17/Fontan/img/tel.png" width="36px"></td>
+										<td>
+											<div style="width: 100%">
+												<a target="_blank" href="https://www.facebook.com/SSCA-535192806677054/"><img src="http://190.60.211.17/Fontan/img/facebook_C.png" width="36px" style="opacity: 1"></a>
+						                        <a target="_blank" href="https://twitter.com/sscacolombia"><img src="http://190.60.211.17/Fontan/img/Twitter_C.png" width="36px"></a>
+						                        <a target="_blank" href="https://www.youtube.com/channel/UCkZ6kVJWgmS9vQJ3_mK5NAA"><img src="http://190.60.211.17/Fontan/img/Youtube_C.png" width="36px"></a>
+						                        <a target="_blank" href="https://plus.google.com/109158087234743471968"><img src="http://190.60.211.17/Fontan/img/google_C.png" width="36px"></a>  
+											</div>
+										</td>
+									</tr>
+								</table>';									
+									
+								
+								$configuraciones["mailtype"] = 'html';
+								$this->email->initialize($configuraciones);
+								$this->email->from('ruta@ssca.com', 'SSCA – Servicios Escolares Colegio Fontán');
+								$this->email->to($email_to);
+								$this->email->subject($email_subject);
+								$this->email->message($mensaje);
+								$this->email->send();
+								echo json_encode($jsonUsuario);
+							}else{
+								$jsonUsuario[0]["Mensaje"] = "El estudiante no se ha recogido el dia de hoy en esta ruta";
+								$jsonUsuario[0]["CodigoConfirmacion"] = "0";
+								$jsonUsuario[0]["TipoRegistro"] = $tipo;
+								echo json_encode($jsonUsuario);
+							}
+						}else{
+							$jsonUsuario[0]["Mensaje"] = "El estudiante ya se ha entregado el dia de hoy en esta ruta";
+							$jsonUsuario[0]["CodigoConfirmacion"] = "0";
+							$jsonUsuario[0]["TipoRegistro"] = $tipo;
+							echo json_encode($jsonUsuario);
+						}
+						break;	
+				}
+				
 				
 			}else{
 				$jsonUsuario[0]["Mensaje"] = "No es estudiante";
@@ -3241,19 +3946,24 @@ class Rutas extends CI_Controller {
 		$DB_DBName = "ssca";        
 		$DB_TBLName = "log_ruta";
 		$filename = "Reporte log ruta ".$_GET['f'];
-		 // mensaje != 'geolocalizacion and' 
-		$sql = sprintf("SELECT CONCAT(PrimerApellido, ' ', SegundoApellido, ' ', PrimerNombre, ' ', SegundoNombre) as 'Nombre', hora AS 'Hora', 
-		tipo as 'Categoría mensaje', mensaje AS 'Mensaje', nombreruta As 'Ruta' 
-		FROM log_ruta a
-		LEFT JOIN usuarios ON usuarios.idUsuario = a.idestudiante
-		LEFT JOIN asignacionruta ON asignacionruta.id = a.idruta
-		WHERE fecha = '%s' AND mensaje NOT LIKE 'geolocalizacion'", $_GET['f']);
-		
+		$sql = sprintf("Select 
+			PrimerApellido, 
+			SegundoApellido, 
+			PrimerNombre, 
+			SegundoNombre, 
+			hora, 
+			mensaje, 
+			coordenadas_recogida 
+			from %s
+			inner join usuarios
+			on usuarios.NumeroId = log_ruta.idestudiante 
+			where fecha = '%s'", 
+			$DB_TBLName, $_GET['f']);
+		// exit($sql);
 		$Connect = @mysql_connect($DB_Server, $DB_Username, $DB_Password) or die("Couldn't connect to MySQL:<br>" . mysql_error() . "<br>" . mysql_errno());
 		$Db = @mysql_select_db($DB_DBName, $Connect) or die("Couldn't select database:<br>" . mysql_error(). "<br>" . mysql_errno());   
 		$result = @mysql_query($sql,$Connect) or die("Couldn't execute query:<br>" . mysql_error(). "<br>" . mysql_errno());    
 		$file_ending = "xls";
-
 		header("Content-Type: application/xls");    
 		header("Content-Disposition: attachment; filename=$filename.xls");  
 		header("Pragma: no-cache"); 
