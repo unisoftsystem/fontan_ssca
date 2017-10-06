@@ -5,6 +5,9 @@
     }
 ?>
 <style>
+  #btnConsultarRuta {
+    display: none;
+  }
   .modal.fade.in {
     display: block;
   }
@@ -480,22 +483,7 @@
         <div class="tab-content">
           <!-- TAB INICIO -->
           <div role="tabpanel" class="tab-pane active" id="home">
-            <div class="row" id="divTabla">
-                <div class="col-md-12">
-                 <table width="100%" border="1">
-                  <thead>
-                    <tr style="background-color: #81BEF7; color: white; font-size: 13px">
-                      <td align="center">Nombre Estudiante</td>
-                      <td align="center">Hora de Ascenso</td>
-                      <td align="center">Hora de Descenso</td>
-                      <td align="center">Mensajes de Alertas Relacionados</td>
-                    </tr>
-                  </thead>
-                  <tbody id="tbody">
-                  </tbody>
-                </table> 
-              </div>
-            </div>
+            <div class="loader"></div>
           </div>
           <!-- TAB PARTICULIARIDADES -->
           <div role="tabpanel" class="tab-pane" id="particuliaridades">

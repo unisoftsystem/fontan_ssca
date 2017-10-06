@@ -33,7 +33,6 @@ class Permisos_model extends CI_Model
 		$sql = sprintf("SELECT * FROM `permiso` WHERE `idUsuario`='%s' AND `Fecha`= '%s'", $usuario, $fecha);
 		$sql .= ($hora != NULL) ? sprintf(" AND `Hora` <= '%s'", $hora) : "";
 		$sql .= sprintf(" AND `Estado`='ACTIVO' AND `Tipo`= '%s' ORDER BY `Fecha`, `Hora` DESC LIMIT 1", $tipo);
-		
 		$data = $this->db->query($sql);
 
 		if($data->num_rows() > 0) return $data;

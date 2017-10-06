@@ -10,6 +10,7 @@ $('#selectruta').blur(function() {
 
 function dispatchGetData() {
   _getData('particuliaridades');
+  _getData('registroEstudiantes');
   _getData('messagesMonitores');
   _getData('alertas');
   _getData('chatAcudiente');
@@ -28,8 +29,6 @@ $('a[href="#recorrido_graf"]').on('click', function() {
   }, 500);
 });
 
-
-
 function validarRutaYFecha(ruta, fecha){
   if (!ruta || !fecha) {
     return false
@@ -45,6 +44,8 @@ function _getData(endPoint) {
   if( validarRutaYFecha(_idRuta, _fecha) ) {
     if(endPoint == 'particuliaridades') {
       printObservaciones({id_asignacionruta: _idRuta, fecha_reemplazo: _fecha});
+    }else if(endPoint == 'registroEstudiantes') {
+      printMsgRegistroEstudiantes({idruta: _idRuta, fecha: _fecha});
     }else if(endPoint == 'messagesMonitores') {
       printMsgAcuedienteMonitor({id_asignacionruta: _idRuta, fecha_reemplazo: _fecha});
     }else if(endPoint == 'alertas') {
@@ -227,9 +228,64 @@ function printObservaciones(data) {
   });
 }
 
+function printMsgRegistroEstudiantes(data) {
+  $('#home').empty();
+  $('#home').append('<div class="loader"></div>');
+
+  var html = '<div class="row" id="divTabla">'+
+                '<div class="col-md-12">'+
+                 '<table width="100%" border="1">'+
+                  '<thead>'+
+                    '<tr style="background-color: #81BEF7; color: white; font-size: 13px">'+
+                      '<td align="center">Nombre Estudiante</td>'+
+                      '<td align="center">Hora de Ascenso</td>'+
+                      '<td align="center">Hora de Descenso</td>'+
+                      '<td align="center">Mensajes de Alertas Relacionados</td>'+
+                    '</tr>'+
+                  '</thead>'+
+                  '<tbody id="tbody">'+
+                    '%replace%'+
+                  '</tbody>'+
+                '</table>' +
+              '</div>'+
+            '</div>';
+
+  var endPoint0 = _base_url + 'index.php/rutas/ListarEstudiantesBitacora';
+  $('#home .loader').css('display', 'block');
+
+  $.post( endPoint0, data).done(function(response) {
+    var tr = '';
+    if(typeof response == 'object' && response.length > 0) {
+      for (var i = response.length - 1; i >= 0; i--) {
+        var nombre = [
+          response[i]['PrimerApellido'], 
+          response[i]['SegundoApellido'], 
+          response[i]['PrimerNombre'], 
+          response[i]['SegundoNombre']
+        ].join(' ');
+        var horaAscenso = (response[i]['tipo'] == "RECOGIDA" ? response[i]['hora']: '');
+        var horaDescenso = (response[i]['tipo'] == "BAJADA" ? response[i]['hora']: '');
+        var mensaje = response[i]['mensaje'];
+        tr += '<tr><td>'+nombre+'</td><td>'+horaAscenso+'</td><td>'+horaDescenso+'</td><td>'+mensaje+'</td></tr>';
+        if(i == 0) {
+          $('#home').empty();
+          $('#home').append(html.replace('%replace%', tr));
+        }
+      }
+    }else {
+      $('#home').empty();
+      $('#home').append('<span>No hay datos para mostrar...</span>');
+    }
+  }).fail(function(error) {
+    $('#home .loader').css('display', 'none');
+    $('#home').append('<span>No hay datos para mostrar...</span>');
+    console.log('error', error);
+  });
+}
+
 function initMap() {
   var image = {
-    url: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
+    url: 'http://190.60.211.17/Fontan/img/pin_w.png',
     size: new google.maps.Size(15, 15),
     origin: new google.maps.Point(0, 0),
     anchor: new google.maps.Point(0, 32)
@@ -247,26 +303,13 @@ function initMap() {
       var marker = new google.maps.Marker({
         position: {lat: parseFloat(p[0]), lng: parseFloat(p[1])},
         icon: image,
-        map: map
+        map: map,
+        map_icon_label: '<span>hola</span>'
       });
     });
   }
 }
 
-// window.exporLogRuta =  function (e) {
-//   var selectRuta = document.getElementById('selectruta');
-//   var idRuta = selectRuta.value;
-//   var nameRuta = selectRuta.options[ selectRuta.options.selectedIndex ].innerText;
-//   var dateFilter = document.getElementById('txtFecha').value;
-//   if(nameRuta.length > 0 && dateFilter.length > 0 && idRuta.length > 0) {
-//     var url = _base_url + 'index.php/rutas/export_log_ruta?i='+idRuta+'&n='+nameRuta+'&f='+dateFilter;
-//     e.target.href = url;
-//     window.alert('Esta operación puede tomar algunos minutos.');
-//   }else {
-//     e.preventDefault();
-//     window.alert('Por favor selecciona una ruta y fecha válida.');
-//   }
-// }
 
 
 

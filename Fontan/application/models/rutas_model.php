@@ -459,7 +459,7 @@ class Rutas_model extends CI_Model
 		$this->db->join('monitor', 'monitor.idmonitor = asignacionruta_particuliaridades.monitor', 'left');
 		$this->db->join('vehiculo', 'vehiculo.idvehiculo = asignacionruta_particuliaridades.idruta', 'left');
 		$particulares = $this->db->get("asignacionruta_particuliaridades");	
-
+	
 		if($particulares->num_rows() > 0){
 			return $particulares->result();
 		}else {
@@ -473,8 +473,6 @@ class Rutas_model extends CI_Model
 		$this->db->where("fecha", $fecha_reemplazo);
 		if( !$whitGeoPos ) $this->db->where("mensaje !=", 'geolocalizacion');
 		$coordenadas = $this->db->get("log_ruta");	
-		//$q = $this->db->last_query();	
-		//var_dump($q);
 		return $coordenadas->result();
 	}
 
@@ -671,7 +669,7 @@ class Rutas_model extends CI_Model
 			", $idruta, $fecha);
 
 		$data = $this->db->query($query);
-
+		//var_dump($this->db->last_query());
 		if($data->num_rows() > 0) return $data->result();
 		else return false;
 	}
@@ -689,7 +687,7 @@ class Rutas_model extends CI_Model
 			", $idruta, $fecha);
 		
 		$data = $this->db->query($query);
-
+		// var_dump($this->db->last_query());
 		if($data->num_rows() > 0) return $data->result();
 		else return false;
 	}
@@ -704,11 +702,10 @@ class Rutas_model extends CI_Model
 				WHERE idruta = '%s' AND fecha =  '%s'
 				AND mensaje !=  'geolocalizacion'
 				AND (tipo =  'MENSAJEAACUDIENTESPORESTUDIANTE' OR tipo =  'MENSAJEAACUDIENTESPORRUTA')
-
 			", $idruta, $fecha);
 
 		$data = $this->db->query($query);
-
+		// var_dump($this->db->last_query());
 		if($data->num_rows() > 0) return $data->result();
 		else return false;
 	}

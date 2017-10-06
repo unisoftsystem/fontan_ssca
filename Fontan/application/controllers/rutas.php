@@ -153,7 +153,8 @@ class Rutas extends CI_Controller {
 		$this->load->model('rutas_model');
 		$response = $this->rutas_model->get_recorrido_dia(
 			$_POST['id_asignacionruta'],
-			$_POST['fecha_reemplazo']
+			$_POST['fecha_reemplazo'],
+			true
 		);
 		header('Content-Type: application/json');
 		echo json_encode($response);
@@ -1944,89 +1945,18 @@ class Rutas extends CI_Controller {
 
 	//Funcion para obtener coordenadas de los estudiantes de una ruta
 	function ListarEstudiantesBitacora(){
-		
 		$this->load->model('Log_ruta_model');
 		$data = $this->Log_ruta_model->get_registro_estudiantes_bitacora();
 		header('Content-type: application/json');
-		echo json_encode($data);
+		echo json_encode($data);	
+	}
 
-		//$estudiantes = $this->rutas_model->getEstudiantes($_REQUEST["idruta"]);//Se llama a la funcion de que esta en modelo y el resultado se guarda
-
-		// if($estudiantes != null){			
-		// 	foreach ($estudiantes->result() as $value) {
-		// 		$respuesta = $this->rutas_model->getLogEstudianteBitacora($_REQUEST["idruta"], $_REQUEST["fecha"], "RECOGIDA", $value->idUsuario);//Se llama a la funcion de que esta en modelo y el resultado se guarda
-		// 		if($respuesta != null){
-		// 			$value->HoraRecogido = $respuesta->result()[0]->hora;
-		// 		}else{
-		// 			$value->HoraRecogido = "";
-		// 		}
-
-		// 		$datos = $this->rutas_model->getLogEstudianteBitacora($_REQUEST["idruta"], $_REQUEST["fecha"], "BAJADA", $value->idUsuario);//Se llama a la funcion de que esta en modelo y el resultado se guarda
-		// 		if($datos != null){
-		// 			$value->HoraEntregado = $datos->result()[0]->hora;				
-		// 		}else{
-		// 			$value->HoraEntregado = "";
-		// 		}
-
-		// 		$json = "[]";
-		// 		$contador = 0;
-		// 		$respuestaMensaj = $this->rutas_model->listarMensajesAcudienteaCoordinadorFecha($_REQUEST["idruta"], $_REQUEST["fecha"], $value->idUsuario);//Se llama a la funcion de que esta en modelo y el resultado se guarda
-
-		// 		if($respuestaMensaj != null){			
-		// 			foreach ($respuestaMensaj->result() as $valor) {
-		// 				if($contador == 0){
-		// 					$json = json_encode($valor);
-		// 					$contador++;
-		// 				}else{
-		// 					$json .= "," . json_encode($valor);
-		// 				}
-		// 			}
-					
-		// 		}
-
-		// 		$respuestaCoor = $this->rutas_model->listarMensajesCoordinadorAcudienteFecha($_REQUEST["idruta"], $_REQUEST["fecha"], $value->idUsuario);//Se llama a la funcion de que esta en modelo y el resultado se guarda
-
-		// 		if($respuestaCoor != null){			
-		// 			foreach ($respuestaCoor->result() as $valor) {
-		// 				if($contador == 0){
-		// 					$json = json_encode($valor);
-		// 					$contador++;
-		// 				}else{
-		// 					$json .= "," . json_encode($valor);
-		// 				}
-		// 			}
-					
-		// 		}
-		// 		if($json == "[]"){
-		// 			$value->mensajes = json_decode($json);
-		// 		}else{
-		// 			$value->mensajes = json_decode("[" . $json . "]");
-		// 		}
-
-		// 		$respuestaMonit = $this->rutas_model->listarMensajesMonitoraEstudiante($_REQUEST["idruta"], $_REQUEST["fecha"], $value->idUsuario);//Se llama a la funcion de que esta en modelo y el resultado se guarda
-
-		// 		if($respuestaMonit != null){			
-		// 			foreach ($respuestaMonit->result() as $valor) {
-		// 				if($contador == 0){
-		// 					$json = json_encode($valor);
-		// 					$contador++;
-		// 				}else{
-		// 					$json .= "," . json_encode($valor);
-		// 				}
-		// 			}
-					
-		// 		}
-		// 		if($json == "[]"){
-		// 			$value->mensajes = json_decode($json);
-		// 		}else{
-		// 			$value->mensajes = json_decode("[" . $json . "]");
-		// 		}
-				
-		// 	}	
-		// 	echo json_encode($estudiantes->result());
-		// }else{
-		// 	echo "[]";
-		// }		
+	//Funcion para obtener coordenadas de los estudiantes de una ruta
+	function ListarEstudiantesBitacora_formView(){
+		$this->load->model('Log_ruta_model');
+		$data = $this->Log_ruta_model->get_registro_estudiantes_bitacora_formView();
+		header('Content-type: application/json');
+		echo json_encode($data);	
 	}
 
 	//Funcion para obtener coordenadas de los estudiantes de una ruta

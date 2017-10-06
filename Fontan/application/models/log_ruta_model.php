@@ -17,7 +17,27 @@ class Log_ruta_model extends CI_Model
 			WHERE idruta = '%s' 
 			and fecha = '%s'
 			and idestudiante in 
-			(SELECT idUsuario FROM usuarios WHERE NumeroId IN (SELECT valores FROM cart WHERE ruta = '%s'))",
+			(SELECT idUsuario FROM usuarios WHERE NumeroId IN (SELECT valores FROM cart WHERE ruta = '%s')) 
+			ORDER BY a.hora",
+			$_POST['idruta'], 
+			$_POST['fecha'], 
+			$_POST['idruta'] 
+		);
+		$query = $this->db->query($sql);
+		return $query->result_array();
+	}
+
+	function get_registro_estudiantes_bitacora_formView()
+	{
+		$sql = sprintf("SELECT a.mensaje, a.hora, a.tipo, b.PrimerApellido, b.SegundoApellido, b.PrimerNombre, b.SegundoNombre
+			FROM view_log_ruta_last2months a
+			inner join usuarios b
+			on b.idUsuario = a.idestudiante
+			WHERE idruta = '%s' 
+			and fecha = '%s'
+			and idestudiante in 
+			(SELECT idUsuario FROM usuarios WHERE NumeroId IN (SELECT valores FROM cart WHERE ruta = '%s')) 
+			ORDER BY a.hora",
 			$_POST['idruta'], 
 			$_POST['fecha'], 
 			$_POST['idruta'] 
